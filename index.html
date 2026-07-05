@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eos Kratos Power Ltd</title>
+    <style>
+        /* Global Enforced White Background & Reset */
+        body {
+            margin: 0;
+            overflow: hidden;
+            background-color: #ffffff;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #333333;
+        }
+
+        /* Fixed Top Navigation */
+        nav {
+            position: fixed;
+            top: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1000;
+            background-color: #ffffff;
+            padding: 15px 40px;
+            border: 1px solid #e0e0e0;
+            border-radius: 4px;
+            display: flex;
+            gap: 30px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+
+        nav button {
+            background: none;
+            border: none;
+            font-size: 14px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            color: #004d26;
+            cursor: pointer;
+            text-transform: uppercase;
+            padding: 8px 16px;
+            transition: color 0.3s ease, border-bottom 0.3s ease;
+            border-bottom: 2px solid transparent;
+        }
+
+        nav button:hover {
+            color: #e68a00;
+            border-bottom: 2px solid #e68a00;
+        }
+
+        /* 3D Scene Architecture */
+        .scene {
+            width: 100vw;
+            height: 100vh;
+            perspective: 1500px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Rotational Cube Axle */
+        .cube {
+            width: 80vw;
+            height: 75vh;
+            position: relative;
+            transform-style: preserve-3d;
+            transform: translateZ(-40vw);
+            transition: transform 1.2s cubic-bezier(0.25, 0.1, 0.25, 1);
+        }
+
+        /* Standardized Face Panels */
+        .face {
+            position: absolute;
+            width: 80vw;
+            height: 75vh;
+            background-color: #ffffff;
+            border: 1px solid #eaeaea;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.04);
+            padding: 50px;
+            box-sizing: border-box;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        /* Box Layout Positioning */
+        .face-home     { transform: rotateY(0deg) translateZ(40vw); }
+        .face-services { transform: rotateY(90deg) translateZ(40vw); }
+        .face-about    { transform: rotateY(180deg) translateZ(40vw); }
+        .face-contacts { transform: rotateY(-90deg) translateZ(40vw); }
+
+        /* Typography & Layout Modules */
+        h1 {
+            font-size: 2.8rem;
+            color: #004d26;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        
+        h2 {
+            font-size: 1.4rem;
+            color: #555555;
+            margin-top: 0;
+            font-weight: 400;
+        }
+        
+        p {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            max-width: 750px;
+            margin: 15px auto;
+            color: #444444;
+        }
+        
+        .logo {
+            max-width: 280px;
+            margin-bottom: 30px;
+        }
+        
+        .grid-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 25px;
+            justify-content: center;
+            margin-top: 30px;
+            width: 100%;
+            max-width: 1000px;
+        }
+        
+        .grid-item {
+            border: 1px solid #f0f0f0;
+            padding: 30px;
+            width: calc(50% - 25px);
+            box-sizing: border-box;
+            text-align: left;
+            background-color: #ffffff;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.02);
+        }
+        
+        .grid-item strong {
+            display: block;
+            font-size: 1.2rem;
+            color: #004d26;
+            margin-bottom: 10px;
+        }
+
+        .contact-info {
+            text-align: left;
+            background: #ffffff;
+            padding: 30px;
+            border: 1px solid #eeeeee;
+            width: 100%;
+            max-width: 600px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 3D Navigation Controls -->
+    <nav>
+        <button onclick="rotateSite(0)">Home</button>
+        <button onclick="rotateSite(-90)">Services</button>
+        <button onclick="rotateSite(-180)">About Us</button>
+        <button onclick="rotateSite(90)">Contacts</button>
+    </nav>
+
+    <!-- 3D Environment -->
+    <div class="scene">
+        <div class="cube" id="site-grid">
+            
+            <!-- PAGE 1: FRONT (Home) -->
+            <div class="face face-home">
+                <img src="Eos Kratos Power (3).png" alt="Eos Kratos Power Logo" class="logo">
+                <h1>Eos Kratos Power Ltd</h1>
+                <h2>Bringing the Dawn of Reliable Energy[cite: 1]</h2>
+                <p>We are positioned to address the chronic electricity deficit in the Idu Karmo district of Abuja by delivering reliable, commercially priced electricity directly to commercial tenants and high-density residential end-users[cite: 1].</p>
+            </div>
+
+            <!-- PAGE 2: RIGHT (Services) -->
+            <div class="face face-services">
+                <h1>Infrastructure & Services</h1>
+                <div class="grid-list">
+                    <div class="grid-item">
+                        <strong>Solar Hybrid Mini-Grids</strong>
+                        <p>Deploying sub-1MW localized solar infrastructure that operates entirely independently of the Nigerian national grid, guaranteeing 24/7 uptime[cite: 1, 6].</p>
+                    </div>
+                    <div class="grid-item">
+                        <strong>Smart Pre-Paid Metering</strong>
+                        <p>Executing energy sale agreements and automating revenue collection through proprietary token-based smart meters to eliminate credit risk[cite: 1, 5].</p>
+                    </div>
+                    <div class="grid-item">
+                        <strong>Technical Engineering Services</strong>
+                        <p>Delivering electrical engineering, procurement, construction, and installation services for residential, commercial, and industrial power systems[cite: 2].</p>
+                    </div>
+                    <div class="grid-item">
+                        <strong>Hardware Procurement</strong>
+                        <p>Importing and installing Tier-1 monocrystalline photovoltaic modules and high-cycle lithium iron phosphate (LFP) battery storage facilities[cite: 1, 6].</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PAGE 3: BACK (About Us) -->
+            <div class="face face-about">
+                <h1>Corporate Intelligence</h1>
+                <p>Eos Kratos Power Ltd was officially incorporated under the Companies and Allied Matters Act 2020 on April 7, 2026, bearing registration number 9467082[cite: 3, 4]. Operating dynamically as an independent power producer, our strategic regulatory design bypasses standard generation licensing through a highly efficient sub-1MW mini-grid permit process[cite: 1, 6].</p>
+                <p>Strategic oversight and capital allocation are directed by our Chairman, Chekube Imuentinyan Azu, operating from our United States framework, while regulatory and local operational liaisons are managed by our Local Director, Joan Saman, in Nigeria[cite: 1, 5].</p>
+            </div>
+
+            <!-- PAGE 4: LEFT (Contacts) -->
+            <div class="face face-contacts">
+                <h1>Connect With Us</h1>
+                <p>Securing market exclusivity through Tripartite Agreements with community leadership[cite: 1].</p>
+                <div class="contact-info">
+                    <p><strong>Primary Headquarters:</strong><br>Idu Karmo Operational Zone, Abuja, Federal Capital Territory, Nigeria[cite: 1]</p>
+                    <p><strong>International Operations:</strong><br>Houston, Texas, USA[cite: 1]</p>
+                    <p><strong>Corporate Affiliations:</strong><br>Registered with the Corporate Affairs Commission (CAC)[cite: 3] and compliant with Nigerian Electricity Regulatory Commission (NERC) parameters[cite: 1].</p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Rotation Logic -->
+    <script>
+        function rotateSite(angle) {
+            const cube = document.getElementById('site-grid');
+            cube.style.transform = `translateZ(-40vw) rotateY(${angle}deg)`;
+        }
+    </script>
+</body>
+</html>
