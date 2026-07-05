@@ -4,6 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Eos Kratos Power Ltd</title>
+    
+    <!-- Dynamic Favicon Association to Core Brand Logo Asset -->
+    <link rel="icon" type="image/png" href="Eos Kratos Power (3).png">
+    
     <style>
         /* Global Enforced White Background & Reset */
         body {
@@ -24,7 +28,7 @@
             background-color: #ffffff;
         }
 
-        /* Full-Screen Rotational Cube */
+        /* Full-Screen Rotational Cube Box Axle */
         .cube {
             width: 100vw;
             height: 100vh;
@@ -47,13 +51,13 @@
             overflow-x: hidden;
         }
 
-        /* Box Layout Positioning */
+        /* Box Layout Positioning Parameters */
         .face-home     { transform: rotateY(0deg) translateZ(50vw); }
         .face-services { transform: rotateY(90deg) translateZ(50vw); }
         .face-about    { transform: rotateY(180deg) translateZ(50vw); }
         .face-contacts { transform: rotateY(-90deg) translateZ(50vw); }
 
-        /* Navigation Bar (Embedded in each face) */
+        /* Navigation Bar Structure (Embedded to rotate seamlessly with each face) */
         .navbar {
             display: flex;
             justify-content: space-between;
@@ -72,6 +76,14 @@
             color: #004d26;
             text-transform: uppercase;
             letter-spacing: 1.5px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .nav-brand img {
+            height: 30px;
+            width: auto;
         }
 
         .nav-links button {
@@ -92,7 +104,7 @@
             color: #e68a00;
         }
 
-        /* Main Content Layout */
+        /* Main Content Layout Framework */
         .content-wrap {
             flex: 1;
             padding: 60px;
@@ -139,6 +151,36 @@
             max-width: 280px;
             margin-bottom: 20px;
         }
+
+        /* Image Display Showcase Components */
+        .hero-gallery {
+            display: flex;
+            gap: 20px;
+            width: 100%;
+            max-width: 1000px;
+            margin: 30px 0;
+        }
+
+        .gallery-img {
+            flex: 1;
+            height: 250px;
+            object-fit: cover;
+            border: 1px solid #eeeeee;
+            transition: transform 0.3s ease;
+        }
+
+        .gallery-img:hover {
+            transform: scale(1.02);
+        }
+
+        .full-hero-img {
+            width: 100%;
+            max-width: 1000px;
+            height: 350px;
+            object-fit: cover;
+            margin: 30px 0;
+            border: 1px solid #eeeeee;
+        }
         
         /* Grid Layouts for Services */
         .grid-list {
@@ -152,17 +194,30 @@
         
         .grid-item {
             border: 1px solid #eeeeee;
-            padding: 30px;
+            padding: 0;
             width: calc(33.333% - 20px);
             box-sizing: border-box;
             text-align: left;
             background-color: #ffffff;
             transition: transform 0.3s ease, box-shadow 0.3s ease;
+            display: flex;
+            flex-direction: column;
         }
 
         .grid-item:hover {
             transform: translateY(-5px);
             box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+        }
+
+        .grid-item-img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            border-bottom: 1px solid #eeeeee;
+        }
+
+        .grid-item-text {
+            padding: 25px;
         }
         
         .grid-item strong {
@@ -172,10 +227,10 @@
             margin-bottom: 12px;
         }
 
-        /* SVG Graphic Containers */
+        /* SVG Graphic Presentation Containers */
         .graphic-container {
             width: 100%;
-            max-width: 900px;
+            max-width: 1000px;
             margin: 40px auto;
             border: 1px solid #eeeeee;
             background-color: #ffffff;
@@ -185,7 +240,7 @@
 
         .download-btn {
             display: inline-block;
-            margin-top: 10px;
+            margin-top: 15px;
             padding: 8px 20px;
             background-color: #004d26;
             color: #ffffff;
@@ -199,7 +254,7 @@
             background-color: #e68a00;
         }
 
-        /* Footer */
+        /* Fixed / Pinned Seamless Footers */
         .site-footer {
             background-color: #ffffff;
             border-top: 1px solid #eeeeee;
@@ -220,7 +275,7 @@
             text-decoration: underline;
         }
 
-        /* Executive Profile */
+        /* Executive Strategy Profiles */
         .profile-card {
             display: flex;
             flex-direction: column;
@@ -229,6 +284,8 @@
             margin-top: 30px;
             text-align: left;
             background-color: #ffffff;
+            width: 100%;
+            box-sizing: border-box;
         }
 
         .profile-card h3 {
@@ -247,14 +304,17 @@
 </head>
 <body>
 
-    <!-- 3D Environment -->
+    <!-- 3D Environment Wrapper -->
     <div class="scene">
         <div class="cube" id="site-grid">
             
             <!-- PAGE 1: FRONT (Home) -->
             <div class="face face-home">
                 <header class="navbar">
-                    <div class="nav-brand">Eos Kratos Power</div>
+                    <div class="nav-brand">
+                        <img src="Eos Kratos Power (3).png" alt="Favicon Logo">
+                        Eos Kratos Power
+                    </div>
                     <nav class="nav-links">
                         <button onclick="rotateSite(0)">Home</button>
                         <button onclick="rotateSite(-90)">Services</button>
@@ -266,6 +326,13 @@
                     <img src="Eos Kratos Power (3).png" alt="Eos Kratos Power Logo" class="logo">
                     <h1>Eos Kratos Power Ltd</h1>
                     <h2>Bringing the Dawn of Reliable Energy</h2>
+                    
+                    <!-- Dynamic Site Media Integration -->
+                    <div class="hero-gallery">
+                        <img src="Solar-farms-1.jpg" alt="Solar Farm Infrastructure Field View" class="gallery-img">
+                        <img src="sky-image.jpeg" alt="Renewable Solar Array Grid Under Blue Sky" class="gallery-img">
+                    </div>
+
                     <p class="center-text">We operate as an independent power producer dedicated to addressing chronic electricity deficits. By deploying localized, solar hybrid mini-grids, we deliver reliable, commercially priced electricity directly to commercial tenants and high-density residential end-users, bypassing unreliable national grids.</p>
                 </div>
                 <footer class="site-footer">
@@ -276,7 +343,10 @@
             <!-- PAGE 2: RIGHT (Services) -->
             <div class="face face-services">
                 <header class="navbar">
-                    <div class="nav-brand">Eos Kratos Power</div>
+                    <div class="nav-brand">
+                        <img src="Eos Kratos Power (3).png" alt="Favicon Logo">
+                        Eos Kratos Power
+                    </div>
                     <nav class="nav-links">
                         <button onclick="rotateSite(0)">Home</button>
                         <button onclick="rotateSite(-90)">Services</button>
@@ -286,70 +356,73 @@
                 </header>
                 <div class="content-wrap">
                     <h1>Infrastructure & Services</h1>
-                    <p class="center-text">Comprehensive energy asset management, hardware deployment, and technical operations.</p>
+                    <p class="center-text">Comprehensive energy asset management, structural hardware deployment, and dynamic technical utility operations.</p>
                     
                     <div class="grid-list">
                         <div class="grid-item">
-                            <strong>Solar Hybrid Mini-Grids</strong>
-                            <p>Deploying sub-1MW localized solar infrastructure that operates independently of the national grid, utilizing high-cycle lithium iron phosphate (LFP) battery storage to guarantee 24/7 uptime.</p>
+                            <img src="Farm-idea.webp" alt="Industrial Solar Micro Grid Installation" class="grid-item-img">
+                            <div class="grid-item-text">
+                                <strong>Solar Hybrid Mini-Grids</strong>
+                                <p>Deploying sub-1MW localized solar infrastructure that operates independently of the national grid, utilizing high-cycle lithium iron phosphate (LFP) battery storage to guarantee 24/7 uptime.</p>
+                            </div>
                         </div>
                         <div class="grid-item">
-                            <strong>Smart Pre-Paid Metering</strong>
-                            <p>Executing energy sale agreements utilizing proprietary token-based smart meters. This automated utility distribution model ensures complete operational efficiency and eliminates accounts receivable risks.</p>
+                            <img src="RenewableEnergy.jpg" alt="Hybrid Power Co-Generation Arrays" class="grid-item-img">
+                            <div class="grid-item-text">
+                                <strong>Smart Pre-Paid Metering</strong>
+                                <p>Executing energy sale agreements utilizing proprietary token-based smart meters. This automated utility distribution model ensures complete operational efficiency and eliminates accounts receivable risks.</p>
+                            </div>
                         </div>
                         <div class="grid-item">
-                            <strong>Distributed Energy Resources (DER)</strong>
-                            <p>Designing decentralized power systems, combined heating and cooling solutions, and behind-the-meter storage to enhance local energy resilience and minimize dependency on centralized infrastructure.</p>
+                            <img src="solar-energy-coast-stockcake.jpg" alt="Coastal High Capacity Photovoltaic Field" class="grid-item-img">
+                            <div class="grid-item-text">
+                                <strong>Distributed Energy Resources (DER)</strong>
+                                <p>Designing decentralized power systems, combined heating and cooling solutions, and behind-the-meter storage to enhance local energy resilience and minimize dependency on centralized infrastructure.</p>
+                            </div>
                         </div>
                         <div class="grid-item">
-                            <strong>Energy Asset Management (O&M)</strong>
-                            <p>Providing end-to-end lifecycle management of solar plants. This includes predictive maintenance, continuous monitoring via centralized operations, regulatory compliance, and performance ratio optimization to ensure maximum ROI.</p>
+                            <img src="nrgcs_cs101_hero.jpg" alt="Technical Solar Engineering Operations" class="grid-item-img">
+                            <div class="grid-item-text">
+                                <strong>Energy Asset Management (O&M)</strong>
+                                <p>Providing end-to-end lifecycle management of solar plants. This includes predictive maintenance, continuous monitoring via centralized operations, regulatory compliance, and performance ratio optimization to ensure maximum ROI.</p>
+                            </div>
                         </div>
                         <div class="grid-item">
-                            <strong>Technical Engineering Procurement</strong>
-                            <p>Delivering heavy electrical engineering, civil works, and installation services. We source Tier-1 monocrystalline photovoltaic modules and grid-forming inverters optimized for continuous industrial load profiles.</p>
+                            <img src="Solar-farms-1.jpg" alt="Commercial Generation Infrastructure" class="grid-item-img">
+                            <div class="grid-item-text">
+                                <strong>Technical Engineering Procurement</strong>
+                                <p>Delivering heavy electrical engineering, civil works, and installation services. We source Tier-1 monocrystalline photovoltaic modules and grid-forming inverters optimized for continuous industrial load profiles.</p>
+                            </div>
                         </div>
                         <div class="grid-item">
-                            <strong>Commercial Sustainability Optimization</strong>
-                            <p>Assisting large-scale operations in reaching carbon-reduction goals while managing capital costs through precise technical integrations and localized emission displacement.</p>
+                            <img src="sky-image.jpeg" alt="Sustainable Grid Architecture Developments" class="grid-item-img">
+                            <div class="grid-item-text">
+                                <strong>Commercial Sustainability Optimization</strong>
+                                <p>Assisting large-scale operations in reaching carbon-reduction goals while managing capital costs through precise technical integrations and localized emission displacement.</p>
+                            </div>
                         </div>
                     </div>
 
-                    <!-- SVG Graphic: Mini Grid Architecture -->
+                    <!-- SVG Interactive Graphic Block Structure -->
                     <div class="graphic-container">
                         <h2 style="text-align: left; margin-bottom: 20px;">Standard Mini-Grid Architecture</h2>
                         <svg id="svg-architecture" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 350" width="100%" height="auto">
-                            <!-- Background -->
                             <rect width="800" height="350" fill="#ffffff" />
-                            
-                            <!-- Solar Array -->
                             <rect x="50" y="150" width="120" height="80" fill="#e68a00" rx="8"/>
                             <text x="110" y="195" font-family="Arial" font-size="16" font-weight="bold" fill="#ffffff" text-anchor="middle">Solar Array</text>
-                            
-                            <!-- Battery Storage -->
                             <rect x="250" y="50" width="120" height="80" fill="#333333" rx="8"/>
                             <text x="310" y="95" font-family="Arial" font-size="16" font-weight="bold" fill="#ffffff" text-anchor="middle">LFP Storage</text>
-                            
-                            <!-- Smart Inverter -->
                             <rect x="250" y="220" width="120" height="80" fill="#004d26" rx="8"/>
                             <text x="310" y="265" font-family="Arial" font-size="16" font-weight="bold" fill="#ffffff" text-anchor="middle">Smart Inverter</text>
-                            
-                            <!-- Smart Meter -->
                             <rect x="450" y="150" width="100" height="80" fill="#0073e6" rx="8"/>
                             <text x="500" y="195" font-family="Arial" font-size="16" font-weight="bold" fill="#ffffff" text-anchor="middle">Smart Meter</text>
-                            
-                            <!-- Commercial/Residential Load -->
                             <rect x="630" y="130" width="120" height="120" fill="#555555" rx="8"/>
                             <text x="690" y="195" font-family="Arial" font-size="16" font-weight="bold" fill="#ffffff" text-anchor="middle">End Users</text>
-
-                            <!-- Connecting Lines -->
                             <path d="M 170 190 L 220 190 L 220 90 L 250 90" stroke="#cccccc" stroke-width="4" fill="none"/>
                             <path d="M 170 190 L 220 190 L 220 260 L 250 260" stroke="#cccccc" stroke-width="4" fill="none"/>
                             <path d="M 370 90 L 410 90 L 410 190 L 450 190" stroke="#cccccc" stroke-width="4" fill="none"/>
                             <path d="M 370 260 L 410 260 L 410 190 L 450 190" stroke="#cccccc" stroke-width="4" fill="none"/>
                             <path d="M 550 190 L 630 190" stroke="#cccccc" stroke-width="4" fill="none"/>
-                            
-                            <!-- Flow Arrows -->
                             <polygon points="590,185 600,190 590,195" fill="#cccccc" />
                         </svg>
                         <a href="javascript:void(0)" onclick="downloadSVG('svg-architecture', 'Eos_Kratos_Architecture.svg')" class="download-btn">Download Diagram (SVG)</a>
@@ -363,7 +436,10 @@
             <!-- PAGE 3: BACK (About Us) -->
             <div class="face face-about">
                 <header class="navbar">
-                    <div class="nav-brand">Eos Kratos Power</div>
+                    <div class="nav-brand">
+                        <img src="Eos Kratos Power (3).png" alt="Favicon Logo">
+                        Eos Kratos Power
+                    </div>
                     <nav class="nav-links">
                         <button onclick="rotateSite(0)">Home</button>
                         <button onclick="rotateSite(-90)">Services</button>
@@ -373,6 +449,9 @@
                 </header>
                 <div class="content-wrap">
                     <h1>Corporate Intelligence</h1>
+                    
+                    <img src="solar-energy-coast-stockcake.jpg" alt="Strategic Energy Transition Mapping Layout" class="full-hero-img">
+
                     <p>Eos Kratos Power Ltd was incorporated under the Companies and Allied Matters Act 2020 on April 7, 2026. Designed dynamically as an independent power producer, our strategic framework is engineered to bypass standard generation friction through efficient, localized sub-1MW mini-grid infrastructure, ensuring rapid deployment and strict compliance with Nigerian Electricity Regulatory Commission parameters.</p>
                     
                     <div class="profile-card">
@@ -388,32 +467,23 @@
                         <p>Based in Abuja, Joan Saman executes the critical localized governance necessary to fulfill stringent energy regulatory presences. She leads community stakeholder negotiations, secures Tripartite Agreements, and manages liaison operations with regional distribution frameworks and electrical safety agencies.</p>
                     </div>
 
-                    <!-- SVG Graphic: Asset Lifecycle -->
-                    <div class="graphic-container" style="margin-top: 40px;">
+                    <!-- SVG Secondary Data Flow Representation Matrix -->
+                    <div class="graphic-container">
                         <h2 style="text-align: left; margin-bottom: 20px;">Asset Performance Lifecycle</h2>
                         <svg id="svg-lifecycle" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 250" width="100%" height="auto">
                             <rect width="800" height="250" fill="#ffffff" />
-                            
-                            <!-- Nodes -->
                             <circle cx="150" cy="125" r="45" fill="#e68a00"/>
                             <text x="150" y="130" font-family="Arial" font-size="14" font-weight="bold" fill="#ffffff" text-anchor="middle">Procurement</text>
-                            
                             <circle cx="316" cy="125" r="45" fill="#004d26"/>
                             <text x="316" y="130" font-family="Arial" font-size="14" font-weight="bold" fill="#ffffff" text-anchor="middle">Deployment</text>
-                            
                             <circle cx="482" cy="125" r="45" fill="#0073e6"/>
                             <text x="482" y="130" font-family="Arial" font-size="14" font-weight="bold" fill="#ffffff" text-anchor="middle">Monitoring</text>
-                            
                             <circle cx="650" cy="125" r="45" fill="#333333"/>
                             <text x="650" y="130" font-family="Arial" font-size="14" font-weight="bold" fill="#ffffff" text-anchor="middle">Optimization</text>
-
-                            <!-- Arrows -->
                             <path d="M 205 125 L 260 125" stroke="#cccccc" stroke-width="4" fill="none"/>
                             <polygon points="255,120 265,125 255,130" fill="#cccccc" />
-                            
                             <path d="M 371 125 L 427 125" stroke="#cccccc" stroke-width="4" fill="none"/>
                             <polygon points="422,120 432,125 422,130" fill="#cccccc" />
-                            
                             <path d="M 537 125 L 595 125" stroke="#cccccc" stroke-width="4" fill="none"/>
                             <polygon points="590,120 600,125 590,130" fill="#cccccc" />
                         </svg>
@@ -428,7 +498,10 @@
             <!-- PAGE 4: LEFT (Contacts) -->
             <div class="face face-contacts">
                 <header class="navbar">
-                    <div class="nav-brand">Eos Kratos Power</div>
+                    <div class="nav-brand">
+                        <img src="Eos Kratos Power (3).png" alt="Favicon Logo">
+                        Eos Kratos Power
+                    </div>
                     <nav class="nav-links">
                         <button onclick="rotateSite(0)">Home</button>
                         <button onclick="rotateSite(-90)">Services</button>
@@ -438,9 +511,12 @@
                 </header>
                 <div class="content-wrap">
                     <h1>Connect With Us</h1>
+                    
+                    <img src="Farm-idea.webp" alt="Renewable Solar Infrastructure Close Up Grid" class="full-hero-img">
+
                     <p class="center-text">Inquiries regarding power purchase agreements, smart grid integration, and strategic community deployments.</p>
                     
-                    <div class="profile-card" style="max-width: 600px; margin: 40px auto; text-align: center;">
+                    <div class="profile-card" style="max-width: 600px; margin: 20px auto; text-align: center;">
                         <h3 style="text-align: center;">Headquarters & Operations</h3>
                         <hr style="border: 0; border-top: 1px solid #eeeeee; width: 100%; margin: 20px 0;">
                         <p><strong>Primary Deployment Zone:</strong><br>Idu Karmo Operational Sector, Abuja, Federal Capital Territory, Nigeria</p>
@@ -456,21 +532,18 @@
         </div>
     </div>
 
-    <!-- Rotation & SVG Download Logic -->
+    <!-- 3D Transform & Asset Download Engines -->
     <script>
         function rotateSite(angle) {
             const cube = document.getElementById('site-grid');
-            // The translateZ calculation maintains the 100vw box structure
             cube.style.transform = `translateZ(-50vw) rotateY(${angle}deg)`;
         }
 
-        // Script to allow direct downloading of the embedded SVGs
         function downloadSVG(svgId, fileName) {
             const svgElement = document.getElementById(svgId);
             const serializer = new XMLSerializer();
             let source = serializer.serializeToString(svgElement);
             
-            // Add name spaces
             if(!source.match(/^<svg[^>]+xmlns="http\:\/\/www\.w3\.org\/2000\/svg"/)){
                 source = source.replace(/^<svg/, '<svg xmlns="http://www.w3.org/2000/svg"');
             }
@@ -478,13 +551,9 @@
                 source = source.replace(/^<svg/, '<svg xmlns:xlink="http://www.w3.org/1999/xlink"');
             }
 
-            // Add xml declaration
             source = '<?xml version="1.0" standalone="no"?>\r\n' + source;
-
-            // Convert svg source to URI data scheme
             const url = "data:image/svg+xml;charset=utf-8,"+encodeURIComponent(source);
             
-            // Create a link and trigger download
             const link = document.createElement("a");
             link.href = url;
             link.download = fileName;
