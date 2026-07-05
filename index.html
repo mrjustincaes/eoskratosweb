@@ -4,857 +4,131 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Eos Kratos Power Ltd</title>
-    
     <link rel="icon" type="image/png" href="Eos Kratos Power (3).png">
     
     <style>
-        /* Global Enforced White Background & Reset */
-        html, body {
-            margin: 0;
-            padding: 0;
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-            background-color: #ffffff;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            color: #333333;
-        }
+        /* Base Setup */
+        html, body { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; font-family: 'Segoe UI', sans-serif; background: #fff; }
 
-        /* 3D Scene Architecture */
-        .scene {
-            width: 100vw;
-            height: 100vh;
-            perspective: 2500px;
-            overflow: hidden;
-            background-color: #ffffff;
-            transition: transform 0.1s ease;
-        }
-
-        /* Full-Screen Rotational Cube Box */
-        .cube {
-            width: 100%;
-            height: 100%;
-            position: relative;
+        /* Scene & Cube */
+        .scene { width: 100vw; height: 100vh; perspective: 2500px; }
+        .cube { 
+            width: 100%; height: 100%; position: relative; 
             transform-style: preserve-3d;
-            -webkit-transform-style: preserve-3d;
             transform: translateZ(-50vw) rotateY(0deg);
-            transition: transform 1.2s cubic-bezier(0.25, 0.1, 0.25, 1);
+            transition: transform 1s cubic-bezier(0.25, 0.1, 0.25, 1);
         }
 
-        /* Standardized Face Panels with Strict Scroll & Interaction Lock */
-        .face {
-            position: absolute;
-            width: 100vw;
-            height: 100vh;
-            background-color: #ffffff;
-            box-sizing: border-box;
-            overflow: hidden;
-            
-            /* Crucial fixes for Safari/Chrome 3D scroll traps */
-            pointer-events: none; 
-            backface-visibility: hidden;
-            -webkit-backface-visibility: hidden;
-            
-            /* Hide inactive pages completely after rotation completes */
-            opacity: 0;
-            visibility: hidden; 
-            transition: opacity 0.4s ease, visibility 0s 1.2s;
+        /* Face Logic */
+        .face { 
+            position: absolute; width: 100vw; height: 100vh;
+            backface-visibility: hidden; opacity: 0; visibility: hidden;
+            transition: opacity 0.5s ease;
         }
+        .face.active { opacity: 1; visibility: visible; }
 
-        .face.active {
-            pointer-events: auto; 
-            opacity: 1;
-            visibility: visible;
-            transition: opacity 0.5s ease 0.3s, visibility 0s 0s;
-        }
+        /* Scroll Engine */
+        .scroll-container { width: 100%; height: 100%; overflow-y: auto; display: flex; flex-direction: column; }
 
-        /* Dedicated Scroll Container */
-        .scroll-container {
-            width: 100%;
-            height: 100%;
-            overflow-y: auto;
-            overflow-x: hidden;
-            display: flex;
-            flex-direction: column;
-            scroll-behavior: smooth;
-            -webkit-overflow-scrolling: touch;
-        }
+        /* Layout Positions */
+        .f1 { transform: rotateY(0deg) translateZ(50vw); }
+        .f2 { transform: rotateY(90deg) translateZ(50vw); }
+        .f3 { transform: rotateY(180deg) translateZ(50vw); }
+        .f4 { transform: rotateY(-90deg) translateZ(50vw); }
 
-        /* Box Layout Positioning Parameters */
-        .face-home     { transform: rotateY(0deg) translateZ(50vw); }
-        .face-services { transform: rotateY(90deg) translateZ(50vw); }
-        .face-about    { transform: rotateY(180deg) translateZ(50vw); }
-        .face-contact  { transform: rotateY(-90deg) translateZ(50vw); }
-
-        /* Navigation Bar Structure */
-        .navbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 20px 60px;
-            background-color: #ffffff;
-            border-bottom: 1px solid #eeeeee;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            flex-shrink: 0;
-            width: 100%;
-            box-sizing: border-box;
-        }
-
-        .nav-brand {
-            font-size: 1.2rem;
-            font-weight: 700;
-            color: #004d26;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .nav-brand img {
-            height: 30px;
-            width: auto;
-        }
-
-        .nav-links button {
-            background: none;
-            border: none;
-            font-size: 14px;
-            font-weight: 600;
-            letter-spacing: 1px;
-            color: #333333;
-            cursor: pointer;
-            text-transform: uppercase;
-            padding: 8px 16px;
-            margin-left: 10px;
-            transition: color 0.3s ease;
-        }
-
-        .nav-links button:hover {
-            color: #e68a00;
-        }
-
-        /* Main Content Layout Framework */
-        .content-wrap {
-            flex: 1 0 auto;
-            padding: 60px 20px;
-            max-width: 1200px;
-            margin: 0 auto;
-            width: 100%;
-            box-sizing: border-box;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
-        }
-
-        /* Dynamic Staggered Animations */
-        .content-wrap > * {
-            opacity: 0;
-            transform: translateY(30px);
-            transition: opacity 0.8s cubic-bezier(0.25, 0.1, 0.25, 1), transform 0.8s cubic-bezier(0.25, 0.1, 0.25, 1);
-        }
-
-        .face.active .content-wrap > * {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .face.active .content-wrap > *:nth-child(1) { transition-delay: 0.2s; }
-        .face.active .content-wrap > *:nth-child(2) { transition-delay: 0.3s; }
-        .face.active .content-wrap > *:nth-child(3) { transition-delay: 0.4s; }
-        .face.active .content-wrap > *:nth-child(4) { transition-delay: 0.5s; }
-        .face.active .content-wrap > *:nth-child(5) { transition-delay: 0.6s; }
-        .face.active .content-wrap > *:nth-child(6) { transition-delay: 0.7s; }
-
-        /* Typography */
-        h1 {
-            font-size: 3rem;
-            color: #004d26;
-            margin-bottom: 10px;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-        }
+        /* Branding & Nav */
+        .navbar { display: flex; justify-content: space-between; align-items: center; padding: 20px 60px; position: sticky; top: 0; background: #fff; z-index: 100; border-bottom: 1px solid #eee; }
+        .nav-links button { background: none; border: none; font-weight: 700; text-transform: uppercase; cursor: pointer; padding: 10px; }
         
-        h2 {
-            font-size: 1.5rem;
-            color: #555555;
-            margin-top: 0;
-            font-weight: 400;
-        }
+        /* Content */
+        .content { max-width: 1000px; margin: 40px auto; width: 100%; box-sizing: border-box; text-align: center; }
+        .footer { padding: 40px; text-align: center; border-top: 1px solid #eee; margin-top: auto; }
         
-        p {
-            font-size: 1.1rem;
-            line-height: 1.8;
-            max-width: 800px;
-            margin: 15px auto;
-            color: #444444;
-            text-align: left;
-        }
-
-        .center-text {
-            text-align: center;
-        }
-        
-        /* Home Logo Sizing */
-        .home-logo {
-            max-width: 250px;
-            margin-bottom: 0px; 
-        }
-
-        .home-title {
-            margin-top: 5px;
-        }
-
-        /* Image Display Showcase Components */
-        .hero-gallery {
-            display: flex;
-            gap: 20px;
-            width: 100%;
-            max-width: 1000px;
-            margin: 30px auto;
-        }
-
-        .gallery-img {
-            flex: 1;
-            height: 250px;
-            object-fit: cover;
-            border: 1px solid #eeeeee;
-            transition: transform 0.4s ease;
-        }
-
-        .gallery-img:hover {
-            transform: scale(1.03);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-        }
-
-        .full-hero-img {
-            width: 100%;
-            max-width: 1000px;
-            height: 350px;
-            object-fit: cover;
-            margin: 30px auto;
-            border: 1px solid #eeeeee;
-            display: block;
-        }
-        
-        /* Grid Layouts for Services */
-        .grid-list {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 30px;
-            justify-content: center;
-            margin-top: 40px;
-            width: 100%;
-        }
-        
-        .grid-item {
-            border: 1px solid #eeeeee;
-            padding: 0;
-            width: calc(33.333% - 20px);
-            box-sizing: border-box;
-            text-align: left;
-            background-color: #ffffff;
-            transition: transform 0.4s ease, box-shadow 0.4s ease;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .grid-item:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 12px 30px rgba(0,0,0,0.08);
-        }
-
-        .grid-item-img {
-            width: 100%;
-            height: 180px;
-            object-fit: cover;
-            border-bottom: 1px solid #eeeeee;
-        }
-
-        .grid-item-text {
-            padding: 25px;
-        }
-        
-        .grid-item strong {
-            display: block;
-            font-size: 1.2rem;
-            color: #004d26;
-            margin-bottom: 12px;
-        }
-
-        /* SVG Graphic Presentation Containers */
-        .graphic-container {
-            width: 100%;
-            max-width: 1000px;
-            margin: 40px auto;
-            border: 1px solid #eeeeee;
-            background-color: #ffffff;
-            padding: 20px;
-            box-sizing: border-box;
-            transition: box-shadow 0.3s ease;
-        }
-
-        .graphic-container:hover {
-            box-shadow: 0 8px 25px rgba(0,0,0,0.05);
-        }
-
-        .download-btn {
-            display: inline-block;
-            margin-top: 15px;
-            padding: 8px 20px;
-            background-color: #004d26;
-            color: #ffffff;
-            text-decoration: none;
-            font-size: 0.9rem;
-            border-radius: 4px;
-            transition: background 0.3s ease;
-        }
-
-        .download-btn:hover {
-            background-color: #e68a00;
-        }
-
-        /* Contact Form CTA */
-        .contact-form {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            width: 100%;
-            max-width: 600px;
-            margin: 30px auto;
-            text-align: left;
-        }
-
-        .contact-form input, .contact-form textarea {
-            padding: 15px;
-            border: 1px solid #cccccc;
-            border-radius: 4px;
-            font-family: inherit;
-            font-size: 1rem;
-            background-color: #fcfcfc;
-            width: 100%;
-            box-sizing: border-box;
-        }
-
-        .contact-form button {
-            padding: 15px;
-            background-color: #004d26;
-            color: #ffffff;
-            border: none;
-            border-radius: 4px;
-            font-size: 1.1rem;
-            cursor: pointer;
-            text-transform: uppercase;
-            font-weight: 600;
-            transition: background-color 0.3s ease;
-            width: 100%;
-            box-sizing: border-box;
-        }
-
-        .contact-form button:hover {
-            background-color: #e68a00;
-        }
-
-        /* Perfectly Centered and Unified Footer */
-        .site-footer {
-            background-color: #ffffff;
-            border-top: 1px solid #eeeeee;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            padding: 25px 20px;
-            font-size: 0.95rem;
-            color: #666666;
-            width: 100%;
-            flex-shrink: 0;
-            box-sizing: border-box;
-        }
-
-        .site-footer p {
-            margin: 0;
-            text-align: center;
-            width: 100%;
-        }
-
-        .site-footer a {
-            color: #004d26;
-            text-decoration: none;
-            font-weight: 600;
-        }
-
-        .site-footer a:hover {
-            text-decoration: underline;
-        }
-
-        /* Executive Strategy Profiles */
-        .profile-card {
-            display: flex;
-            flex-direction: column;
-            border: 1px solid #eeeeee;
-            padding: 30px;
-            margin-top: 30px;
-            text-align: left;
-            background-color: #ffffff;
-            width: 100%;
-            box-sizing: border-box;
-            transition: transform 0.3s ease;
-        }
-
-        .profile-card:hover {
-            transform: translateX(5px);
-            border-left: 4px solid #e68a00;
-        }
-
-        .profile-card h3 {
-            margin: 0 0 5px 0;
-            color: #004d26;
-            font-size: 1.4rem;
-        }
-
-        .profile-card h4 {
-            margin: 0 0 20px 0;
-            color: #e68a00;
-            font-size: 1rem;
-            font-weight: 500;
-        }
-
-        /* Highly Aligned and Centered HQ Card */
-        .hq-card {
-            margin: 40px auto;
-            text-align: center;
-            align-items: center;
-            justify-content: center;
-            display: flex;
-            flex-direction: column;
-            max-width: 800px;
-            border-top: 4px solid #004d26;
-            border-left: 1px solid #eeeeee !important;
-            background: #ffffff;
-        }
-
-        .hq-card:hover {
-            transform: translateY(-5px);
-            border-left: 1px solid #eeeeee !important;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
-        }
-
-        .hq-card p {
-            text-align: center;
-            margin: 8px 0;
-        }
-
-        /* Shaking Animation for Form Submission */
-        @keyframes shakeSite {
-            0% { transform: translate(2px, 2px) rotate(0deg); }
-            10% { transform: translate(-2px, -3px) rotate(-1deg); }
-            20% { transform: translate(-4px, 0px) rotate(1deg); }
-            30% { transform: translate(4px, 3px) rotate(0deg); }
-            40% { transform: translate(2px, -2px) rotate(1deg); }
-            50% { transform: translate(-2px, 3px) rotate(-1deg); }
-            60% { transform: translate(-4px, 2px) rotate(0deg); }
-            70% { transform: translate(4px, 2px) rotate(-1deg); }
-            80% { transform: translate(-2px, -2px) rotate(1deg); }
-            90% { transform: translate(2px, 3px) rotate(0deg); }
-            100% { transform: translate(2px, -3px) rotate(-1deg); }
-        }
-
-        .shake-active {
-            animation: shakeSite 0.6s cubic-bezier(.36,.07,.19,.97) both infinite;
-        }
-
-        /* Flying Paper Plane SVG Overlay */
-        .paper-plane-container {
-            position: fixed;
-            z-index: 9999;
-            display: none;
-            pointer-events: none;
-            width: 100px;
-            height: 100px;
-            bottom: 0;
-            left: 0;
-        }
-
-        @keyframes flyPlane {
-            0% {
-                transform: translate(-20vw, 90vh) scale(0.5) rotate(0deg);
-                opacity: 1;
-            }
-            50% {
-                transform: translate(50vw, 40vh) scale(1.5) rotate(-15deg);
-                opacity: 1;
-            }
-            100% {
-                transform: translate(120vw, -20vh) scale(0.5) rotate(-30deg);
-                opacity: 0;
-            }
-        }
-
-        .fly-animation {
-            display: block;
-            animation: flyPlane 1.8s ease-in-out forwards;
-        }
-
+        /* Animations */
+        @keyframes shake { 0%, 100% {transform: translate(0)} 25% {transform: translate(-5px, 5px)} 75% {transform: translate(5px, -5px)} }
+        .shaking { animation: shake 0.5s infinite; }
+        .plane { position: fixed; bottom: 0; left: 0; width: 80px; display: none; }
+        .flying { display: block; animation: fly 2s forwards; }
+        @keyframes fly { 0% {transform: translate(-100px, 0)} 100% {transform: translate(110vw, -100vh)} }
     </style>
 </head>
 <body>
 
-    <!-- Paper Plane SVG Overlay for Submission Animation -->
-    <div class="paper-plane-container" id="svg-paper-plane">
-        <svg viewBox="0 0 24 24" fill="#004d26" xmlns="http://www.w3.org/2000/svg">
-            <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
-        </svg>
-    </div>
+    <div class="plane" id="plane"><svg viewBox="0 0 24 24" fill="#004d26"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg></div>
 
-    <div class="scene" id="main-scene">
-        <div class="cube" id="site-grid">
-            
-            <!-- PAGE 1: FRONT (Home) -->
-            <div class="face face-home active" id="page-home">
+    <div class="scene">
+        <div class="cube" id="cube">
+            <div class="face f1 active" id="p1">
                 <div class="scroll-container">
-                    <header class="navbar">
-                        <div class="nav-brand">
-                            <img src="Eos Kratos Power (3).png" alt="Favicon Logo">
-                            Eos Kratos Power
-                        </div>
-                        <nav class="nav-links">
-                            <button onclick="rotateSite(0, 'page-home')">Home</button>
-                            <button onclick="rotateSite(-90, 'page-services')">Services</button>
-                            <button onclick="rotateSite(-180, 'page-about')">About Us</button>
-                            <button onclick="rotateSite(90, 'page-contact')">Contact Us</button>
-                        </nav>
-                    </header>
-                    
-                    <div class="content-wrap">
-                        <img src="Eos Kratos Power (3).png" alt="Eos Kratos Power Logo" class="home-logo">
-                        <h1 class="home-title">Eos Kratos Power Ltd</h1>
-                        <h2>Bringing the Dawn of Reliable Energy</h2>
-                        
-                        <div class="hero-gallery">
-                            <img src="Solar-farms-1.jpg" alt="Solar Farm Infrastructure Field View" class="gallery-img">
-                            <img src="sky-image.jpeg" alt="Renewable Solar Array Grid Under Blue Sky" class="gallery-img">
-                        </div>
-
-                        <p class="center-text">We operate as an independent power producer dedicated to addressing chronic electricity deficits. By deploying localized, solar hybrid mini-grids, we deliver reliable, commercially priced electricity directly to commercial tenants and high-density residential end-users, bypassing unreliable national grids.</p>
-                    </div>
-
-                    <footer class="site-footer">
-                        <p>Site created by <a href="https://jcphouston.com" target="_blank">Justin Case Production LLC</a> for Eos Kratos Power Ltd &copy; 2026</p>
-                    </footer>
+                    <header class="navbar"><div class="nav-brand">Eos Kratos Power</div><nav class="nav-links"><button onclick="go(0, 'p1')">Home</button><button onclick="go(-90, 'p2')">Services</button><button onclick="go(-180, 'p3')">About Us</button><button onclick="go(90, 'p4')">Contact Us</button></nav></header>
+                    <div class="content"><h1>Eos Kratos Power Ltd</h1><p>Bringing the dawn of reliable energy to Idu Karmo, Abuja.</p></div>
+                    <footer class="footer">Site created by <a href="https://jcphouston.com">Justin Case Production LLC</a> for Eos Kratos Power Ltd &copy; 2026</footer>
                 </div>
             </div>
 
-            <!-- PAGE 2: RIGHT (Services) -->
-            <div class="face face-services" id="page-services">
+            <div class="face f2" id="p2">
                 <div class="scroll-container">
-                    <header class="navbar">
-                        <div class="nav-brand">
-                            <img src="Eos Kratos Power (3).png" alt="Favicon Logo">
-                            Eos Kratos Power
-                        </div>
-                        <nav class="nav-links">
-                            <button onclick="rotateSite(0, 'page-home')">Home</button>
-                            <button onclick="rotateSite(-90, 'page-services')">Services</button>
-                            <button onclick="rotateSite(-180, 'page-about')">About Us</button>
-                            <button onclick="rotateSite(90, 'page-contact')">Contact Us</button>
-                        </nav>
-                    </header>
-                    
-                    <div class="content-wrap">
-                        <h1>Infrastructure & Services</h1>
-                        <p class="center-text">Comprehensive energy asset management, structural hardware deployment, and dynamic technical utility operations.</p>
-                        
-                        <div class="grid-list">
-                            <div class="grid-item">
-                                <img src="Farm-idea.webp" alt="Industrial Solar Micro Grid Installation" class="grid-item-img">
-                                <div class="grid-item-text">
-                                    <strong>Solar Hybrid Mini-Grids</strong>
-                                    <p>Deploying sub-1MW localized solar infrastructure that operates independently of the national grid, utilizing high-cycle lithium iron phosphate (LFP) battery storage to guarantee 24/7 uptime.</p>
-                                </div>
-                            </div>
-                            <div class="grid-item">
-                                <img src="RenewableEnergy.jpg" alt="Hybrid Power Co-Generation Arrays" class="grid-item-img">
-                                <div class="grid-item-text">
-                                    <strong>Smart Pre-Paid Metering</strong>
-                                    <p>Executing energy sale agreements utilizing proprietary token-based smart meters. This automated utility distribution model ensures complete operational efficiency and eliminates accounts receivable risks.</p>
-                                </div>
-                            </div>
-                            <div class="grid-item">
-                                <img src="solar-energy-coast-stockcake.jpg" alt="Coastal High Capacity Photovoltaic Field" class="grid-item-img">
-                                <div class="grid-item-text">
-                                    <strong>Distributed Energy Resources (DER)</strong>
-                                    <p>Designing decentralized power systems, combined heating and cooling solutions, and behind-the-meter storage to enhance local energy resilience and minimize dependency on centralized infrastructure.</p>
-                                </div>
-                            </div>
-                            <div class="grid-item">
-                                <img src="nrgcs_cs101_hero.jpg" alt="Technical Solar Engineering Operations" class="grid-item-img">
-                                <div class="grid-item-text">
-                                    <strong>Energy Asset Management (O&M)</strong>
-                                    <p>Providing end-to-end lifecycle management of solar plants. This includes predictive maintenance, continuous monitoring via centralized operations, regulatory compliance, and performance ratio optimization to ensure maximum ROI.</p>
-                                </div>
-                            </div>
-                            <div class="grid-item">
-                                <img src="Solar-farms-1.jpg" alt="Commercial Generation Infrastructure" class="grid-item-img">
-                                <div class="grid-item-text">
-                                    <strong>Technical Engineering Procurement</strong>
-                                    <p>Delivering heavy electrical engineering, civil works, and installation services. We source Tier-1 monocrystalline photovoltaic modules and grid-forming inverters optimized for continuous industrial load profiles.</p>
-                                </div>
-                            </div>
-                            <div class="grid-item">
-                                <img src="sky-image.jpeg" alt="Sustainable Grid Architecture Developments" class="grid-item-img">
-                                <div class="grid-item-text">
-                                    <strong>Commercial Sustainability Optimization</strong>
-                                    <p>Assisting large-scale operations in reaching carbon-reduction goals while managing capital costs through precise technical integrations and localized emission displacement.</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="graphic-container">
-                            <h2 style="text-align: left; margin-bottom: 20px;">Standard Mini-Grid Architecture</h2>
-                            <svg id="svg-architecture" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 350" width="100%" height="auto">
-                                <rect width="800" height="350" fill="#ffffff" />
-                                <rect x="50" y="150" width="120" height="80" fill="#e68a00" rx="8"/>
-                                <text x="110" y="195" font-family="Arial" font-size="16" font-weight="bold" fill="#ffffff" text-anchor="middle">Solar Array</text>
-                                <rect x="250" y="50" width="120" height="80" fill="#333333" rx="8"/>
-                                <text x="310" y="95" font-family="Arial" font-size="16" font-weight="bold" fill="#ffffff" text-anchor="middle">LFP Storage</text>
-                                <rect x="250" y="220" width="120" height="80" fill="#004d26" rx="8"/>
-                                <text x="310" y="265" font-family="Arial" font-size="16" font-weight="bold" fill="#ffffff" text-anchor="middle">Smart Inverter</text>
-                                <rect x="450" y="150" width="100" height="80" fill="#0073e6" rx="8"/>
-                                <text x="500" y="195" font-family="Arial" font-size="16" font-weight="bold" fill="#ffffff" text-anchor="middle">Smart Meter</text>
-                                <rect x="630" y="130" width="120" height="120" fill="#555555" rx="8"/>
-                                <text x="690" y="195" font-family="Arial" font-size="16" font-weight="bold" fill="#ffffff" text-anchor="middle">End Users</text>
-                                <path d="M 170 190 L 220 190 L 220 90 L 250 90" stroke="#cccccc" stroke-width="4" fill="none"/>
-                                <path d="M 170 190 L 220 190 L 220 260 L 250 260" stroke="#cccccc" stroke-width="4" fill="none"/>
-                                <path d="M 370 90 L 410 90 L 410 190 L 450 190" stroke="#cccccc" stroke-width="4" fill="none"/>
-                                <path d="M 370 260 L 410 260 L 410 190 L 450 190" stroke="#cccccc" stroke-width="4" fill="none"/>
-                                <path d="M 550 190 L 630 190" stroke="#cccccc" stroke-width="4" fill="none"/>
-                                <polygon points="590,185 600,190 590,195" fill="#cccccc" />
-                            </svg>
-                            <a href="javascript:void(0)" onclick="downloadSVG('svg-architecture', 'Eos_Kratos_Architecture.svg')" class="download-btn">Download Diagram (SVG)</a>
-                        </div>
-                    </div>
-
-                    <footer class="site-footer">
-                        <p>Site created by <a href="https://jcphouston.com" target="_blank">Justin Case Production LLC</a> for Eos Kratos Power Ltd &copy; 2026</p>
-                    </footer>
+                    <header class="navbar"><div class="nav-brand">Eos Kratos Power</div><nav class="nav-links"><button onclick="go(0, 'p1')">Home</button><button onclick="go(-90, 'p2')">Services</button><button onclick="go(-180, 'p3')">About Us</button><button onclick="go(90, 'p4')">Contact Us</button></nav></header>
+                    <div class="content"><h1>Services</h1><p>Solar hybrid mini-grids, smart metering, and EPC infrastructure.</p></div>
+                    <footer class="footer">Site created by <a href="https://jcphouston.com">Justin Case Production LLC</a> for Eos Kratos Power Ltd &copy; 2026</footer>
                 </div>
             </div>
 
-            <!-- PAGE 3: BACK (About Us) -->
-            <div class="face face-about" id="page-about">
+            <div class="face f3" id="p3">
                 <div class="scroll-container">
-                    <header class="navbar">
-                        <div class="nav-brand">
-                            <img src="Eos Kratos Power (3).png" alt="Favicon Logo">
-                            Eos Kratos Power
-                        </div>
-                        <nav class="nav-links">
-                            <button onclick="rotateSite(0, 'page-home')">Home</button>
-                            <button onclick="rotateSite(-90, 'page-services')">Services</button>
-                            <button onclick="rotateSite(-180, 'page-about')">About Us</button>
-                            <button onclick="rotateSite(90, 'page-contact')">Contact Us</button>
-                        </nav>
-                    </header>
-                    
-                    <div class="content-wrap">
+                    <header class="navbar"><div class="nav-brand">Eos Kratos Power</div><nav class="nav-links"><button onclick="go(0, 'p1')">Home</button><button onclick="go(-90, 'p2')">Services</button><button onclick="go(-180, 'p3')">About Us</button><button onclick="go(90, 'p4')">Contact Us</button></nav></header>
+                    <div class="content">
                         <h1>Corporate Intelligence</h1>
-                        
-                        <img src="solar-energy-coast-stockcake.jpg" alt="Strategic Energy Transition Mapping Layout" class="full-hero-img">
-
-                        <p>Eos Kratos Power Ltd was incorporated under the Companies and Allied Matters Act 2020 on April 7, 2026. Designed dynamically as an independent power producer, our strategic framework is engineered to bypass standard generation friction through efficient, localized sub-1MW mini-grid infrastructure, ensuring rapid deployment and strict compliance with Nigerian Electricity Regulatory Commission parameters.</p>
-                        
                         <div class="profile-card">
-                            <h3>Chekube Imuentinyan Azu</h3>
-                            <h4>Chairman & Primary Capital Allocator</h4>
-                            <p>Operating from Houston, Texas, Chekube Azu provides the strategic direction, international financial architecture, and executive governance for Eos Kratos Power. With a formidable background spanning deep software engineering, computer information systems, and rigorous business management, he possesses a rare convergence of technical foresight and operational acumen.</p>
-                            <p>His extensive entrepreneurial experience uniquely positions him to architect smart grid solutions. By merging the principles of digital automation and UI/UX design with physical utility infrastructure, he ensures the company operates at the absolute cutting edge of energy asset management. Under his guidance, Eos Kratos Power translates complex logistical constraints into streamlined, software-monitored electrical output.</p>
-                        </div>
-
-                        <div class="profile-card">
-                            <h3>Joan Voni Saman</h3>
-                            <h4>Local Director & Operational Liaison</h4>
-                            <p>Based in Abuja, Joan Voni Saman executes the critical localized governance necessary to fulfill stringent energy regulatory presences[cite: 9]. She holds a B.Sc. in General and Applied Psychology and a Diploma in Psychology from the University of Jos, Plateau State[cite: 9]. Her professional experience includes serving as a Research Assistant for the Population Council and the Society for Family Health in the FCT Abuja, where she led data collection using ODK, data analysis, and the selection of target locations and populations alongside donors[cite: 9]. Furthermore, as a Counsellor at the Faith Alive Foundation, she conducted extensive monitoring and evaluation of patients[cite: 9]. She leverages her demonstrated skills in planning, implementation, execution evaluation and assessment, multi-tasking, and adaptability to lead community stakeholder negotiations, secure Tripartite Agreements, and manage operational logistics[cite: 9].</p>
-                        </div>
-
-                        <div class="graphic-container">
-                            <h2 style="text-align: left; margin-bottom: 20px;">Asset Performance Lifecycle</h2>
-                            <svg id="svg-lifecycle" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 250" width="100%" height="auto">
-                                <rect width="800" height="250" fill="#ffffff" />
-                                <circle cx="150" cy="125" r="45" fill="#e68a00"/>
-                                <text x="150" y="130" font-family="Arial" font-size="14" font-weight="bold" fill="#ffffff" text-anchor="middle">Procurement</text>
-                                <circle cx="316" cy="125" r="45" fill="#004d26"/>
-                                <text x="316" y="130" font-family="Arial" font-size="14" font-weight="bold" fill="#ffffff" text-anchor="middle">Deployment</text>
-                                <circle cx="482" cy="125" r="45" fill="#0073e6"/>
-                                <text x="482" y="130" font-family="Arial" font-size="14" font-weight="bold" fill="#ffffff" text-anchor="middle">Monitoring</text>
-                                <circle cx="650" cy="125" r="45" fill="#333333"/>
-                                <text x="650" y="130" font-family="Arial" font-size="14" font-weight="bold" fill="#ffffff" text-anchor="middle">Optimization</text>
-                                <path d="M 205 125 L 260 125" stroke="#cccccc" stroke-width="4" fill="none"/>
-                                <polygon points="255,120 265,125 255,130" fill="#cccccc" />
-                                <path d="M 371 125 L 427 125" stroke="#cccccc" stroke-width="4" fill="none"/>
-                                <polygon points="422,120 432,125 422,130" fill="#cccccc" />
-                                <path d="M 537 125 L 595 125" stroke="#cccccc" stroke-width="4" fill="none"/>
-                                <polygon points="590,120 600,125 590,130" fill="#cccccc" />
-                            </svg>
-                            <a href="javascript:void(0)" onclick="downloadSVG('svg-lifecycle', 'Asset_Lifecycle.svg')" class="download-btn">Download Chart (SVG)</a>
+                            <h3>Joan Voni Saman - Local Director</h3>
+                            <p>With a B.Sc. and Diploma in Psychology from the University of Jos, Joan brings exceptional expertise in community stakeholder negotiation and operational assessment. Her background as a Research Assistant with the Population Council and Society for Family Health, combined with her experience in monitoring and evaluation at Faith Alive Foundation, enables her to lead Tripartite Agreements and community liaison operations with high precision and adaptability.</p>
                         </div>
                     </div>
-
-                    <footer class="site-footer">
-                        <p>Site created by <a href="https://jcphouston.com" target="_blank">Justin Case Production LLC</a> for Eos Kratos Power Ltd &copy; 2026</p>
-                    </footer>
+                    <footer class="footer">Site created by <a href="https://jcphouston.com">Justin Case Production LLC</a> for Eos Kratos Power Ltd &copy; 2026</footer>
                 </div>
             </div>
 
-            <!-- PAGE 4: LEFT (Contact Us) -->
-            <div class="face face-contact" id="page-contact">
+            <div class="face f4" id="p4">
                 <div class="scroll-container">
-                    <header class="navbar">
-                        <div class="nav-brand">
-                            <img src="Eos Kratos Power (3).png" alt="Favicon Logo">
-                            Eos Kratos Power
-                        </div>
-                        <nav class="nav-links">
-                            <button onclick="rotateSite(0, 'page-home')">Home</button>
-                            <button onclick="rotateSite(-90, 'page-services')">Services</button>
-                            <button onclick="rotateSite(-180, 'page-about')">About Us</button>
-                            <button onclick="rotateSite(90, 'page-contact')">Contact Us</button>
-                        </nav>
-                    </header>
-                    
-                    <div class="content-wrap">
+                    <header class="navbar"><div class="nav-brand">Eos Kratos Power</div><nav class="nav-links"><button onclick="go(0, 'p1')">Home</button><button onclick="go(-90, 'p2')">Services</button><button onclick="go(-180, 'p3')">About Us</button><button onclick="go(90, 'p4')">Contact Us</button></nav></header>
+                    <div class="content">
                         <h1>Connect With Us</h1>
-                        
-                        <img src="nrgcs_cs101_hero.jpg" alt="Localized Hillside Solar Infrastructure" class="full-hero-img">
-
-                        <p class="center-text">Inquiries regarding power purchase agreements, smart grid integration, and strategic community deployments.</p>
-                        
-                        <!-- Immediate Call to Action Form -->
-                        <form class="contact-form" id="contact-form" onsubmit="handleFormSubmit(event)">
-                            <input type="text" id="contact-name" name="name" placeholder="Full Name or Company Representative" required>
-                            <input type="email" id="contact-email" name="email" placeholder="Official Email Address" required>
-                            <textarea id="contact-message" name="message" placeholder="Outline your infrastructure requirements or operational zone details..." rows="5" required></textarea>
-                            <button type="submit" id="submit-btn">Submit Official Inquiry</button>
+                        <form id="form" class="contact-form">
+                            <input type="text" placeholder="Name" required>
+                            <input type="email" placeholder="Email" required>
+                            <textarea placeholder="Message"></textarea>
+                            <button type="submit">Submit Inquiry</button>
                         </form>
-
-                        <div class="profile-card hq-card">
-                            <h3 style="text-align: center;">Headquarters & Operations</h3>
-                            <hr style="border: 0; border-top: 1px solid #eeeeee; width: 100%; margin: 20px 0;">
-                            <p><strong>Primary Deployment Zone:</strong><br>Idu Karmo Operational Sector, Abuja, Federal Capital Territory, Nigeria</p>
-                            <p><strong>International Corporate Architecture:</strong><br>Houston, Texas, USA</p>
-                            <p><strong>Direct Telecommunications:</strong><br>+234 806 535 2573 | +234 806 304 1417</p>
-                            <p><strong>Official Email Correspondence:</strong><br>info@eoskratospowerltd.com | eoskratospowerltd@gmail.com</p>
-                            <p><strong>Regulatory Clearances:</strong><br>Corporate Affairs Commission (CAC) Registered | NERC Mini-Grid & NEMSA Code Compliant</p>
+                        <div class="hq-card">
+                            <h3>Headquarters</h3>
+                            <p>Idu Karmo, Abuja, Nigeria | Houston, TX, USA</p>
+                            <p>+234 806 535 2573 | +234 806 304 1417</p>
+                            <p>info@eoskratospowerltd.com | eoskratospowerltd@gmail.com</p>
                         </div>
                     </div>
-
-                    <footer class="site-footer">
-                        <p>Site created by <a href="https://jcphouston.com" target="_blank">Justin Case Production LLC</a> for Eos Kratos Power Ltd &copy; 2026</p>
-                    </footer>
+                    <footer class="footer">Site created by <a href="https://jcphouston.com">Justin Case Production LLC</a> for Eos Kratos Power Ltd &copy; 2026</footer>
                 </div>
             </div>
-
         </div>
     </div>
 
-    <!-- 3D Transform, Animations, Active Class Management & Intercept Logic -->
     <script>
-        function rotateSite(angle, targetPageId) {
-            // Rotate the core structural cube container dynamically to exact angles
-            const cube = document.getElementById('site-grid');
+        function go(angle, id) {
+            const cube = document.getElementById('cube');
             cube.style.transform = `translateZ(-50vw) rotateY(${angle}deg)`;
-
-            // Manage dynamic animation and clear native scroll locks
-            const allFaces = document.querySelectorAll('.face');
-            allFaces.forEach(face => {
-                face.classList.remove('active');
-                
-                // Snap scroll position of hidden pages back to the top seamlessly
-                const scrollContainer = face.querySelector('.scroll-container');
-                if (scrollContainer) {
-                    setTimeout(() => {
-                        scrollContainer.scrollTop = 0;
-                    }, 800); 
-                }
-            });
-
-            // Engage incoming target page pointer events and visibility
-            const targetPage = document.getElementById(targetPageId);
-            if (targetPage) {
-                targetPage.classList.add('active');
-            }
+            document.querySelectorAll('.face').forEach(f => f.classList.remove('active'));
+            setTimeout(() => { document.getElementById(id).classList.add('active'); }, 500);
         }
 
-        // Contact Form Processing, Shaking Animation, and Email Routing Protocol
-        function handleFormSubmit(event) {
-            event.preventDefault(); // Suspend standard form execution
-            
-            const scene = document.getElementById('main-scene');
-            const paperPlane = document.getElementById('svg-paper-plane');
-            const submitBtn = document.getElementById('submit-btn');
-            
-            const originalBtnText = submitBtn.innerText;
-            const originalBtnColor = submitBtn.style.backgroundColor;
-
-            // Trigger entire site shake animation mapping
-            scene.classList.add('shake-active');
-
-            // Trigger flying paper plane SVG keyframe timeline
-            paperPlane.classList.add('fly-animation');
-            
-            // Adjust visual feedback UI
-            submitBtn.innerText = "MESSAGE SENT!";
-            submitBtn.style.backgroundColor = "#e68a00";
-
-            // Aggregate form data
-            const nameInput = document.getElementById('contact-name').value;
-            const emailInput = document.getElementById('contact-email').value;
-            const messageInput = document.getElementById('contact-message').value;
-
-            // Resolve animations post execution and bridge to internal mail clients
+        document.getElementById('form').onsubmit = (e) => {
+            e.preventDefault();
+            document.body.classList.add('shaking');
+            document.getElementById('plane').classList.add('flying');
             setTimeout(() => {
-                scene.classList.remove('shake-active');
-                paperPlane.classList.remove('fly-animation');
-                
-                submitBtn.innerText = originalBtnText;
-                submitBtn.style.backgroundColor = originalBtnColor;
-                
-                // Construct standard mailto URI mapping exactly to the corporate directory
-                const mailtoURI = `mailto:info@eoskratospowerltd.com,eoskratospowerltd@gmail.com?subject=Official Inquiry via Web Platform: ${encodeURIComponent(nameInput)}&body=${encodeURIComponent(messageInput + "\n\nReturn Contact Email: " + emailInput)}`;
-                
-                // Route directly to native client 
-                window.location.href = mailtoURI;
-                
-                // Clear the interface fields globally
-                document.getElementById('contact-form').reset();
-            }, 1800);
-        }
-
-        // SVG Diagram Generation and File Download Pipeline
-        function downloadSVG(svgId, fileName) {
-            const svgElement = document.getElementById(svgId);
-            const serializer = new XMLSerializer();
-            let source = serializer.serializeToString(svgElement);
-            
-            if(!source.match(/^<svg[^>]+xmlns="http\:\/\/www\.w3\.org\/2000\/svg"/)){
-                source = source.replace(/^<svg/, '<svg xmlns="http://www.w3.org/2000/svg"');
-            }
-            if(!source.match(/^<svg[^>]+"http\:\/\/www\.w3\.org\/1999\/xlink"/)){
-                source = source.replace(/^<svg/, '<svg xmlns:xlink="http://www.w3.org/1999/xlink"');
-            }
-
-            source = '<?xml version="1.0" standalone="no"?>\r\n' + source;
-            const url = "data:image/svg+xml;charset=utf-8,"+encodeURIComponent(source);
-            
-            const link = document.createElement("a");
-            link.href = url;
-            link.download = fileName;
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-        }
+                document.body.classList.remove('shaking');
+                window.location.href = "mailto:info@eoskratospowerltd.com,eoskratospowerltd@gmail.com?subject=New Inquiry";
+            }, 2000);
+        };
     </script>
 </body>
 </html>
