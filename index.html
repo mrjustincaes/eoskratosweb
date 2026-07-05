@@ -32,11 +32,12 @@
             height: 100%;
             position: relative;
             transform-style: preserve-3d;
+            -webkit-transform-style: preserve-3d;
             transform: translateZ(-50vw);
             transition: transform 1.2s cubic-bezier(0.25, 0.1, 0.25, 1);
         }
 
-        /* Standardized Face Panels with Scroll Lock & Pointer Event Fix */
+        /* Standardized Face Panels with Hard Scroll Trap Fix */
         .face {
             position: absolute;
             width: 100vw;
@@ -44,14 +45,19 @@
             background-color: #ffffff;
             box-sizing: border-box;
             overflow: hidden;
-            pointer-events: none; /* Prevents hidden faces from trapping the scroll wheel */
-            opacity: 0.3;
-            transition: opacity 0.5s ease;
+            pointer-events: none; 
+            opacity: 0;
+            visibility: hidden; /* Completely removes invisible planes from scroll interference */
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+            transition: opacity 0.4s ease, visibility 0s 0.4s;
         }
 
         .face.active {
-            pointer-events: auto; /* Re-enables scrolling only for the active page */
+            pointer-events: auto; 
             opacity: 1;
+            visibility: visible;
+            transition: opacity 0.5s ease 0.3s, visibility 0s 0s;
         }
 
         /* Dedicated Scroll Container */
@@ -82,7 +88,7 @@
             border-bottom: 1px solid #eeeeee;
             position: sticky;
             top: 0;
-            z-index: 10;
+            z-index: 100;
             flex-shrink: 0;
             width: 100%;
             box-sizing: border-box;
@@ -122,7 +128,7 @@
             color: #e68a00;
         }
 
-        /* Main Content Layout Framework - Perfectly Centered */
+        /* Main Content Layout Framework */
         .content-wrap {
             flex: 1 0 auto;
             padding: 60px 20px;
@@ -148,12 +154,12 @@
             transform: translateY(0);
         }
 
-        .face.active .content-wrap > *:nth-child(1) { transition-delay: 0.1s; }
-        .face.active .content-wrap > *:nth-child(2) { transition-delay: 0.2s; }
-        .face.active .content-wrap > *:nth-child(3) { transition-delay: 0.3s; }
-        .face.active .content-wrap > *:nth-child(4) { transition-delay: 0.4s; }
-        .face.active .content-wrap > *:nth-child(5) { transition-delay: 0.5s; }
-        .face.active .content-wrap > *:nth-child(6) { transition-delay: 0.6s; }
+        .face.active .content-wrap > *:nth-child(1) { transition-delay: 0.2s; }
+        .face.active .content-wrap > *:nth-child(2) { transition-delay: 0.3s; }
+        .face.active .content-wrap > *:nth-child(3) { transition-delay: 0.4s; }
+        .face.active .content-wrap > *:nth-child(4) { transition-delay: 0.5s; }
+        .face.active .content-wrap > *:nth-child(5) { transition-delay: 0.6s; }
+        .face.active .content-wrap > *:nth-child(6) { transition-delay: 0.7s; }
 
         /* Typography */
         h1 {
@@ -405,6 +411,7 @@
     <div class="scene">
         <div class="cube" id="site-grid">
             
+            <!-- PAGE 1: FRONT (Home) -->
             <div class="face face-home active" id="page-home">
                 <div class="scroll-container">
                     <header class="navbar">
@@ -439,6 +446,7 @@
                 </div>
             </div>
 
+            <!-- PAGE 2: RIGHT (Services) -->
             <div class="face face-services" id="page-services">
                 <div class="scroll-container">
                     <header class="navbar">
@@ -534,6 +542,7 @@
                 </div>
             </div>
 
+            <!-- PAGE 3: BACK (About Us) -->
             <div class="face face-about" id="page-about">
                 <div class="scroll-container">
                     <header class="navbar">
@@ -598,6 +607,7 @@
                 </div>
             </div>
 
+            <!-- PAGE 4: LEFT (Contact Us) -->
             <div class="face face-contact" id="page-contact">
                 <div class="scroll-container">
                     <header class="navbar">
@@ -645,27 +655,24 @@
         </div>
     </div>
 
+    <!-- 3D Transform, Active Class Management, & SVG Download Logic -->
     <script>
         function rotateSite(angle, targetPageId) {
-            // Rotate the core structural cube container
             const cube = document.getElementById('site-grid');
             cube.style.transform = `translateZ(-50vw) rotateY(${angle}deg)`;
 
-            // Manage the dynamic animation and native scroll locks
             const allFaces = document.querySelectorAll('.face');
             allFaces.forEach(face => {
                 face.classList.remove('active');
                 
-                // Optional: reset scroll position of hidden pages so they are at the top when returned to
                 const scrollContainer = face.querySelector('.scroll-container');
                 if (scrollContainer) {
                     setTimeout(() => {
                         scrollContainer.scrollTop = 0;
-                    }, 800); // Wait for the 3D transition to finish before snapping to top
+                    }, 800); 
                 }
             });
 
-            // Re-enable pointer events and trigger staggered animations on the incoming page
             const targetPage = document.getElementById(targetPageId);
             if (targetPage) {
                 targetPage.classList.add('active');
