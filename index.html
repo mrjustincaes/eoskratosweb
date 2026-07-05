@@ -28,25 +28,33 @@
         }
 
         .cube {
-            width: 100vw;
-            height: 100vh;
+            width: 100%;
+            height: 100%;
             position: relative;
             transform-style: preserve-3d;
             transform: translateZ(-50vw);
             transition: transform 1.2s cubic-bezier(0.25, 0.1, 0.25, 1);
         }
 
-        /* Standardized Face Panels with Scroll Lock Fix */
+        /* Standardized Face Panels with Scroll Lock & Pointer Event Fix */
         .face {
             position: absolute;
             width: 100vw;
             height: 100vh;
             background-color: #ffffff;
             box-sizing: border-box;
-            overflow: hidden; /* Lock the outer face */
+            overflow: hidden;
+            pointer-events: none; /* Prevents hidden faces from trapping the scroll wheel */
+            opacity: 0.3;
+            transition: opacity 0.5s ease;
         }
 
-        /* Dedicated Scroll Container to prevent 3D freezing */
+        .face.active {
+            pointer-events: auto; /* Re-enables scrolling only for the active page */
+            opacity: 1;
+        }
+
+        /* Dedicated Scroll Container */
         .scroll-container {
             width: 100%;
             height: 100%;
@@ -55,13 +63,14 @@
             display: flex;
             flex-direction: column;
             scroll-behavior: smooth;
+            -webkit-overflow-scrolling: touch;
         }
 
         /* Box Layout Positioning Parameters */
         .face-home     { transform: rotateY(0deg) translateZ(50vw); }
         .face-services { transform: rotateY(90deg) translateZ(50vw); }
         .face-about    { transform: rotateY(180deg) translateZ(50vw); }
-        .face-contacts { transform: rotateY(-90deg) translateZ(50vw); }
+        .face-contact  { transform: rotateY(-90deg) translateZ(50vw); }
 
         /* Navigation Bar Structure */
         .navbar {
@@ -75,6 +84,8 @@
             top: 0;
             z-index: 10;
             flex-shrink: 0;
+            width: 100%;
+            box-sizing: border-box;
         }
 
         .nav-brand {
@@ -107,14 +118,14 @@
             transition: color 0.3s ease;
         }
 
-        .nav-links button:hover {
+        .nav-links button:hover, .nav-links button.current {
             color: #e68a00;
         }
 
-        /* Main Content Layout Framework */
+        /* Main Content Layout Framework - Perfectly Centered */
         .content-wrap {
             flex: 1 0 auto;
-            padding: 60px;
+            padding: 60px 20px;
             max-width: 1200px;
             margin: 0 auto;
             width: 100%;
@@ -143,7 +154,6 @@
         .face.active .content-wrap > *:nth-child(4) { transition-delay: 0.4s; }
         .face.active .content-wrap > *:nth-child(5) { transition-delay: 0.5s; }
         .face.active .content-wrap > *:nth-child(6) { transition-delay: 0.6s; }
-        .face.active .content-wrap > *:nth-child(7) { transition-delay: 0.7s; }
 
         /* Typography */
         h1 {
@@ -174,7 +184,7 @@
             text-align: center;
         }
         
-        /* Reduced Spacing for Home Logo */
+        /* Home Logo Sizing */
         .home-logo {
             max-width: 250px;
             margin-bottom: 0px; 
@@ -190,7 +200,7 @@
             gap: 20px;
             width: 100%;
             max-width: 1000px;
-            margin: 30px 0;
+            margin: 30px auto;
         }
 
         .gallery-img {
@@ -211,8 +221,9 @@
             max-width: 1000px;
             height: 350px;
             object-fit: cover;
-            margin: 30px 0;
+            margin: 30px auto;
             border: 1px solid #eeeeee;
+            display: block;
         }
         
         /* Grid Layouts for Services */
@@ -292,6 +303,47 @@
             background-color: #e68a00;
         }
 
+        /* Contact Form CTA */
+        .contact-form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            width: 100%;
+            max-width: 600px;
+            margin: 30px auto;
+            text-align: left;
+        }
+
+        .contact-form input, .contact-form textarea {
+            padding: 15px;
+            border: 1px solid #cccccc;
+            border-radius: 4px;
+            font-family: inherit;
+            font-size: 1rem;
+            background-color: #fcfcfc;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .contact-form button {
+            padding: 15px;
+            background-color: #004d26;
+            color: #ffffff;
+            border: none;
+            border-radius: 4px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            text-transform: uppercase;
+            font-weight: 600;
+            transition: background-color 0.3s ease;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .contact-form button:hover {
+            background-color: #e68a00;
+        }
+
         /* Perfectly Centered and Unified Footer */
         .site-footer {
             background-color: #ffffff;
@@ -364,7 +416,7 @@
                             <button onclick="rotateSite(0, 'page-home')">Home</button>
                             <button onclick="rotateSite(-90, 'page-services')">Services</button>
                             <button onclick="rotateSite(-180, 'page-about')">About Us</button>
-                            <button onclick="rotateSite(90, 'page-contacts')">Contacts</button>
+                            <button onclick="rotateSite(90, 'page-contact')">Contact Us</button>
                         </nav>
                     </header>
                     
@@ -398,7 +450,7 @@
                             <button onclick="rotateSite(0, 'page-home')">Home</button>
                             <button onclick="rotateSite(-90, 'page-services')">Services</button>
                             <button onclick="rotateSite(-180, 'page-about')">About Us</button>
-                            <button onclick="rotateSite(90, 'page-contacts')">Contacts</button>
+                            <button onclick="rotateSite(90, 'page-contact')">Contact Us</button>
                         </nav>
                     </header>
                     
@@ -493,7 +545,7 @@
                             <button onclick="rotateSite(0, 'page-home')">Home</button>
                             <button onclick="rotateSite(-90, 'page-services')">Services</button>
                             <button onclick="rotateSite(-180, 'page-about')">About Us</button>
-                            <button onclick="rotateSite(90, 'page-contacts')">Contacts</button>
+                            <button onclick="rotateSite(90, 'page-contact')">Contact Us</button>
                         </nav>
                     </header>
                     
@@ -546,7 +598,7 @@
                 </div>
             </div>
 
-            <div class="face face-contacts" id="page-contacts">
+            <div class="face face-contact" id="page-contact">
                 <div class="scroll-container">
                     <header class="navbar">
                         <div class="nav-brand">
@@ -557,17 +609,24 @@
                             <button onclick="rotateSite(0, 'page-home')">Home</button>
                             <button onclick="rotateSite(-90, 'page-services')">Services</button>
                             <button onclick="rotateSite(-180, 'page-about')">About Us</button>
-                            <button onclick="rotateSite(90, 'page-contacts')">Contacts</button>
+                            <button onclick="rotateSite(90, 'page-contact')">Contact Us</button>
                         </nav>
                     </header>
                     
                     <div class="content-wrap">
                         <h1>Connect With Us</h1>
                         
-                        <img src="Farm-idea.webp" alt="Renewable Solar Infrastructure Close Up Grid" class="full-hero-img">
+                        <img src="nrgcs_cs101_hero.jpg" alt="Localized Hillside Solar Infrastructure" class="full-hero-img">
 
                         <p class="center-text">Inquiries regarding power purchase agreements, smart grid integration, and strategic community deployments.</p>
                         
+                        <form class="contact-form" onsubmit="event.preventDefault(); alert('Inquiry processing module offline in static preview.');">
+                            <input type="text" placeholder="Full Name or Company Representative" required>
+                            <input type="email" placeholder="Official Email Address" required>
+                            <textarea placeholder="Outline your infrastructure requirements or operational zone details..." rows="5" required></textarea>
+                            <button type="submit">Submit Official Inquiry</button>
+                        </form>
+
                         <div class="profile-card" style="max-width: 600px; margin: 20px auto; text-align: center;">
                             <h3 style="text-align: center;">Headquarters & Operations</h3>
                             <hr style="border: 0; border-top: 1px solid #eeeeee; width: 100%; margin: 20px 0;">
@@ -588,24 +647,28 @@
 
     <script>
         function rotateSite(angle, targetPageId) {
-            // Rotate the cube container
+            // Rotate the core structural cube container
             const cube = document.getElementById('site-grid');
             cube.style.transform = `translateZ(-50vw) rotateY(${angle}deg)`;
 
-            // Manage the dynamic animation triggers
-            // First, remove the 'active' class from all pages
+            // Manage the dynamic animation and native scroll locks
             const allFaces = document.querySelectorAll('.face');
             allFaces.forEach(face => {
                 face.classList.remove('active');
+                
+                // Optional: reset scroll position of hidden pages so they are at the top when returned to
+                const scrollContainer = face.querySelector('.scroll-container');
+                if (scrollContainer) {
+                    setTimeout(() => {
+                        scrollContainer.scrollTop = 0;
+                    }, 800); // Wait for the 3D transition to finish before snapping to top
+                }
             });
 
-            // Add the 'active' class to the target page so its contents animate in
+            // Re-enable pointer events and trigger staggered animations on the incoming page
             const targetPage = document.getElementById(targetPageId);
             if (targetPage) {
-                // Small timeout ensures the class is added right as the rotation starts
-                setTimeout(() => {
-                    targetPage.classList.add('active');
-                }, 100);
+                targetPage.classList.add('active');
             }
         }
 
