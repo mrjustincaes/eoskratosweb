@@ -9,9 +9,11 @@
     
     <style>
         /* Global Enforced White Background & Reset */
-        body {
+        html, body {
             margin: 0;
             padding: 0;
+            width: 100%;
+            height: 100%;
             overflow: hidden;
             background-color: #ffffff;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -25,19 +27,21 @@
             perspective: 2500px;
             overflow: hidden;
             background-color: #ffffff;
+            transition: transform 0.1s ease;
         }
 
+        /* Full-Screen Rotational Cube Box */
         .cube {
             width: 100%;
             height: 100%;
             position: relative;
             transform-style: preserve-3d;
             -webkit-transform-style: preserve-3d;
-            transform: translateZ(-50vw);
+            transform: translateZ(-50vw) rotateY(0deg);
             transition: transform 1.2s cubic-bezier(0.25, 0.1, 0.25, 1);
         }
 
-        /* Standardized Face Panels with Hard Scroll Trap Fix */
+        /* Standardized Face Panels with Strict Scroll & Interaction Lock */
         .face {
             position: absolute;
             width: 100vw;
@@ -45,12 +49,16 @@
             background-color: #ffffff;
             box-sizing: border-box;
             overflow: hidden;
+            
+            /* Crucial fixes for Safari/Chrome 3D scroll traps */
             pointer-events: none; 
-            opacity: 0;
-            visibility: hidden; /* Completely removes invisible planes from scroll interference */
             backface-visibility: hidden;
             -webkit-backface-visibility: hidden;
-            transition: opacity 0.4s ease, visibility 0s 0.4s;
+            
+            /* Hide inactive pages completely after rotation completes */
+            opacity: 0;
+            visibility: hidden; 
+            transition: opacity 0.4s ease, visibility 0s 1.2s;
         }
 
         .face.active {
@@ -124,7 +132,7 @@
             transition: color 0.3s ease;
         }
 
-        .nav-links button:hover, .nav-links button.current {
+        .nav-links button:hover {
             color: #e68a00;
         }
 
@@ -354,6 +362,9 @@
         .site-footer {
             background-color: #ffffff;
             border-top: 1px solid #eeeeee;
+            display: flex;
+            justify-content: center;
+            align-items: center;
             text-align: center;
             padding: 25px 20px;
             font-size: 0.95rem;
@@ -361,6 +372,12 @@
             width: 100%;
             flex-shrink: 0;
             box-sizing: border-box;
+        }
+
+        .site-footer p {
+            margin: 0;
+            text-align: center;
+            width: 100%;
         }
 
         .site-footer a {
@@ -404,11 +421,95 @@
             font-size: 1rem;
             font-weight: 500;
         }
+
+        /* Highly Aligned and Centered HQ Card */
+        .hq-card {
+            margin: 40px auto;
+            text-align: center;
+            align-items: center;
+            justify-content: center;
+            display: flex;
+            flex-direction: column;
+            max-width: 800px;
+            border-top: 4px solid #004d26;
+            border-left: 1px solid #eeeeee !important;
+            background: #ffffff;
+        }
+
+        .hq-card:hover {
+            transform: translateY(-5px);
+            border-left: 1px solid #eeeeee !important;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+        }
+
+        .hq-card p {
+            text-align: center;
+            margin: 8px 0;
+        }
+
+        /* Shaking Animation for Form Submission */
+        @keyframes shakeSite {
+            0% { transform: translate(2px, 2px) rotate(0deg); }
+            10% { transform: translate(-2px, -3px) rotate(-1deg); }
+            20% { transform: translate(-4px, 0px) rotate(1deg); }
+            30% { transform: translate(4px, 3px) rotate(0deg); }
+            40% { transform: translate(2px, -2px) rotate(1deg); }
+            50% { transform: translate(-2px, 3px) rotate(-1deg); }
+            60% { transform: translate(-4px, 2px) rotate(0deg); }
+            70% { transform: translate(4px, 2px) rotate(-1deg); }
+            80% { transform: translate(-2px, -2px) rotate(1deg); }
+            90% { transform: translate(2px, 3px) rotate(0deg); }
+            100% { transform: translate(2px, -3px) rotate(-1deg); }
+        }
+
+        .shake-active {
+            animation: shakeSite 0.6s cubic-bezier(.36,.07,.19,.97) both infinite;
+        }
+
+        /* Flying Paper Plane SVG Overlay */
+        .paper-plane-container {
+            position: fixed;
+            z-index: 9999;
+            display: none;
+            pointer-events: none;
+            width: 100px;
+            height: 100px;
+            bottom: 0;
+            left: 0;
+        }
+
+        @keyframes flyPlane {
+            0% {
+                transform: translate(-20vw, 90vh) scale(0.5) rotate(0deg);
+                opacity: 1;
+            }
+            50% {
+                transform: translate(50vw, 40vh) scale(1.5) rotate(-15deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translate(120vw, -20vh) scale(0.5) rotate(-30deg);
+                opacity: 0;
+            }
+        }
+
+        .fly-animation {
+            display: block;
+            animation: flyPlane 1.8s ease-in-out forwards;
+        }
+
     </style>
 </head>
 <body>
 
-    <div class="scene">
+    <!-- Paper Plane SVG Overlay for Submission Animation -->
+    <div class="paper-plane-container" id="svg-paper-plane">
+        <svg viewBox="0 0 24 24" fill="#004d26" xmlns="http://www.w3.org/2000/svg">
+            <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
+        </svg>
+    </div>
+
+    <div class="scene" id="main-scene">
         <div class="cube" id="site-grid">
             
             <!-- PAGE 1: FRONT (Home) -->
@@ -573,9 +674,9 @@
                         </div>
 
                         <div class="profile-card">
-                            <h3>Joan Saman</h3>
+                            <h3>Joan Voni Saman</h3>
                             <h4>Local Director & Operational Liaison</h4>
-                            <p>Based in Abuja, Joan Saman executes the critical localized governance necessary to fulfill stringent energy regulatory presences. She leads community stakeholder negotiations, secures Tripartite Agreements, and manages liaison operations with regional distribution frameworks and electrical safety agencies.</p>
+                            <p>Based in Abuja, Joan Voni Saman executes the critical localized governance necessary to fulfill stringent energy regulatory presences[cite: 9]. She holds a B.Sc. in General and Applied Psychology and a Diploma in Psychology from the University of Jos, Plateau State[cite: 9]. Her professional experience includes serving as a Research Assistant for the Population Council and the Society for Family Health in the FCT Abuja, where she led data collection using ODK, data analysis, and the selection of target locations and populations alongside donors[cite: 9]. Furthermore, as a Counsellor at the Faith Alive Foundation, she conducted extensive monitoring and evaluation of patients[cite: 9]. She leverages her demonstrated skills in planning, implementation, execution evaluation and assessment, multi-tasking, and adaptability to lead community stakeholder negotiations, secure Tripartite Agreements, and manage operational logistics[cite: 9].</p>
                         </div>
 
                         <div class="graphic-container">
@@ -630,19 +731,22 @@
 
                         <p class="center-text">Inquiries regarding power purchase agreements, smart grid integration, and strategic community deployments.</p>
                         
-                        <form class="contact-form" onsubmit="event.preventDefault(); alert('Inquiry processing module offline in static preview.');">
-                            <input type="text" placeholder="Full Name or Company Representative" required>
-                            <input type="email" placeholder="Official Email Address" required>
-                            <textarea placeholder="Outline your infrastructure requirements or operational zone details..." rows="5" required></textarea>
-                            <button type="submit">Submit Official Inquiry</button>
+                        <!-- Immediate Call to Action Form -->
+                        <form class="contact-form" id="contact-form" onsubmit="handleFormSubmit(event)">
+                            <input type="text" id="contact-name" name="name" placeholder="Full Name or Company Representative" required>
+                            <input type="email" id="contact-email" name="email" placeholder="Official Email Address" required>
+                            <textarea id="contact-message" name="message" placeholder="Outline your infrastructure requirements or operational zone details..." rows="5" required></textarea>
+                            <button type="submit" id="submit-btn">Submit Official Inquiry</button>
                         </form>
 
-                        <div class="profile-card" style="max-width: 600px; margin: 20px auto; text-align: center;">
+                        <div class="profile-card hq-card">
                             <h3 style="text-align: center;">Headquarters & Operations</h3>
                             <hr style="border: 0; border-top: 1px solid #eeeeee; width: 100%; margin: 20px 0;">
                             <p><strong>Primary Deployment Zone:</strong><br>Idu Karmo Operational Sector, Abuja, Federal Capital Territory, Nigeria</p>
                             <p><strong>International Corporate Architecture:</strong><br>Houston, Texas, USA</p>
-                            <p><strong>Regulatory Clearances:</strong><br>Corporate Affairs Commission (CAC) Registered<br>NERC Mini-Grid & NEMSA Code Compliant</p>
+                            <p><strong>Direct Telecommunications:</strong><br>+234 806 535 2573 | +234 806 304 1417</p>
+                            <p><strong>Official Email Correspondence:</strong><br>info@eoskratospowerltd.com | eoskratospowerltd@gmail.com</p>
+                            <p><strong>Regulatory Clearances:</strong><br>Corporate Affairs Commission (CAC) Registered | NERC Mini-Grid & NEMSA Code Compliant</p>
                         </div>
                     </div>
 
@@ -655,16 +759,19 @@
         </div>
     </div>
 
-    <!-- 3D Transform, Active Class Management, & SVG Download Logic -->
+    <!-- 3D Transform, Animations, Active Class Management & Intercept Logic -->
     <script>
         function rotateSite(angle, targetPageId) {
+            // Rotate the core structural cube container dynamically to exact angles
             const cube = document.getElementById('site-grid');
             cube.style.transform = `translateZ(-50vw) rotateY(${angle}deg)`;
 
+            // Manage dynamic animation and clear native scroll locks
             const allFaces = document.querySelectorAll('.face');
             allFaces.forEach(face => {
                 face.classList.remove('active');
                 
+                // Snap scroll position of hidden pages back to the top seamlessly
                 const scrollContainer = face.querySelector('.scroll-container');
                 if (scrollContainer) {
                     setTimeout(() => {
@@ -673,12 +780,59 @@
                 }
             });
 
+            // Engage incoming target page pointer events and visibility
             const targetPage = document.getElementById(targetPageId);
             if (targetPage) {
                 targetPage.classList.add('active');
             }
         }
 
+        // Contact Form Processing, Shaking Animation, and Email Routing Protocol
+        function handleFormSubmit(event) {
+            event.preventDefault(); // Suspend standard form execution
+            
+            const scene = document.getElementById('main-scene');
+            const paperPlane = document.getElementById('svg-paper-plane');
+            const submitBtn = document.getElementById('submit-btn');
+            
+            const originalBtnText = submitBtn.innerText;
+            const originalBtnColor = submitBtn.style.backgroundColor;
+
+            // Trigger entire site shake animation mapping
+            scene.classList.add('shake-active');
+
+            // Trigger flying paper plane SVG keyframe timeline
+            paperPlane.classList.add('fly-animation');
+            
+            // Adjust visual feedback UI
+            submitBtn.innerText = "MESSAGE SENT!";
+            submitBtn.style.backgroundColor = "#e68a00";
+
+            // Aggregate form data
+            const nameInput = document.getElementById('contact-name').value;
+            const emailInput = document.getElementById('contact-email').value;
+            const messageInput = document.getElementById('contact-message').value;
+
+            // Resolve animations post execution and bridge to internal mail clients
+            setTimeout(() => {
+                scene.classList.remove('shake-active');
+                paperPlane.classList.remove('fly-animation');
+                
+                submitBtn.innerText = originalBtnText;
+                submitBtn.style.backgroundColor = originalBtnColor;
+                
+                // Construct standard mailto URI mapping exactly to the corporate directory
+                const mailtoURI = `mailto:info@eoskratospowerltd.com,eoskratospowerltd@gmail.com?subject=Official Inquiry via Web Platform: ${encodeURIComponent(nameInput)}&body=${encodeURIComponent(messageInput + "\n\nReturn Contact Email: " + emailInput)}`;
+                
+                // Route directly to native client 
+                window.location.href = mailtoURI;
+                
+                // Clear the interface fields globally
+                document.getElementById('contact-form').reset();
+            }, 1800);
+        }
+
+        // SVG Diagram Generation and File Download Pipeline
         function downloadSVG(svgId, fileName) {
             const svgElement = document.getElementById(svgId);
             const serializer = new XMLSerializer();
