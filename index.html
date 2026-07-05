@@ -5,94 +5,94 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Eos Kratos Power Ltd</title>
     <link rel="icon" type="image/png" href="Eos Kratos Power (3).png">
-    
     <style>
-        /* Base Setup */
+        /* BASE RESET */
         html, body { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; font-family: 'Segoe UI', sans-serif; background: #fff; }
 
-        /* Scene & Cube */
-        .scene { width: 100vw; height: 100vh; perspective: 2500px; }
+        /* 3D SCENE */
+        .scene { width: 100vw; height: 100vh; perspective: 2500px; overflow: hidden; }
         .cube { 
-            width: 100%; height: 100%; position: relative; 
-            transform-style: preserve-3d;
+            width: 100%; height: 100%; position: relative; transform-style: preserve-3d;
             transform: translateZ(-50vw) rotateY(0deg);
             transition: transform 1s cubic-bezier(0.25, 0.1, 0.25, 1);
         }
 
-        /* Face Logic */
+        /* FACE LOGIC */
         .face { 
             position: absolute; width: 100vw; height: 100vh;
             backface-visibility: hidden; opacity: 0; visibility: hidden;
             transition: opacity 0.5s ease;
         }
         .face.active { opacity: 1; visibility: visible; }
-
-        /* Scroll Engine */
         .scroll-container { width: 100%; height: 100%; overflow-y: auto; display: flex; flex-direction: column; }
 
-        /* Layout Positions */
+        /* POSITIONS */
         .f1 { transform: rotateY(0deg) translateZ(50vw); }
         .f2 { transform: rotateY(90deg) translateZ(50vw); }
         .f3 { transform: rotateY(180deg) translateZ(50vw); }
         .f4 { transform: rotateY(-90deg) translateZ(50vw); }
 
-        /* Branding & Nav */
+        /* UI COMPONENTS */
         .navbar { display: flex; justify-content: space-between; align-items: center; padding: 20px 60px; position: sticky; top: 0; background: #fff; z-index: 100; border-bottom: 1px solid #eee; }
-        .nav-links button { background: none; border: none; font-weight: 700; text-transform: uppercase; cursor: pointer; padding: 10px; }
-        
-        /* Content */
+        .nav-links button { background: none; border: none; font-weight: 700; cursor: pointer; text-transform: uppercase; padding: 10px; }
         .content { max-width: 1000px; margin: 40px auto; width: 100%; box-sizing: border-box; text-align: center; }
         .footer { padding: 40px; text-align: center; border-top: 1px solid #eee; margin-top: auto; }
+        .hq-card { margin: 40px auto; padding: 20px; border-top: 4px solid #004d26; max-width: 800px; }
         
-        /* Animations */
+        /* FORM & ANIMATIONS */
+        .contact-form { display: flex; flex-direction: column; gap: 15px; max-width: 600px; margin: 30px auto; }
+        .contact-form input, textarea { padding: 15px; border: 1px solid #ccc; }
+        .contact-form button { padding: 15px; background: #004d26; color: #fff; border: none; cursor: pointer; }
         @keyframes shake { 0%, 100% {transform: translate(0)} 25% {transform: translate(-5px, 5px)} 75% {transform: translate(5px, -5px)} }
         .shaking { animation: shake 0.5s infinite; }
-        .plane { position: fixed; bottom: 0; left: 0; width: 80px; display: none; }
-        .flying { display: block; animation: fly 2s forwards; }
-        @keyframes fly { 0% {transform: translate(-100px, 0)} 100% {transform: translate(110vw, -100vh)} }
     </style>
 </head>
 <body>
-
-    <div class="plane" id="plane"><svg viewBox="0 0 24 24" fill="#004d26"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg></div>
 
     <div class="scene">
         <div class="cube" id="cube">
             <div class="face f1 active" id="p1">
                 <div class="scroll-container">
                     <header class="navbar"><div class="nav-brand">Eos Kratos Power</div><nav class="nav-links"><button onclick="go(0, 'p1')">Home</button><button onclick="go(-90, 'p2')">Services</button><button onclick="go(-180, 'p3')">About Us</button><button onclick="go(90, 'p4')">Contact Us</button></nav></header>
-                    <div class="content"><h1>Eos Kratos Power Ltd</h1><p>Bringing the dawn of reliable energy to Idu Karmo, Abuja.</p></div>
-                    <footer class="footer">Site created by <a href="https://jcphouston.com">Justin Case Production LLC</a> for Eos Kratos Power Ltd &copy; 2026</footer>
+                    <div class="content"><h1>Eos Kratos Power Ltd</h1><p>Bringing the dawn of reliable energy to Idu Karmo, Abuja[cite: 254, 427].</p></div>
+                    <footer class="footer">Site created by <a href="https://jcphouston.com">Justin Case Production LLC</a></footer>
                 </div>
             </div>
 
             <div class="face f2" id="p2">
                 <div class="scroll-container">
-                    <header class="navbar"><div class="nav-brand">Eos Kratos Power</div><nav class="nav-links"><button onclick="go(0, 'p1')">Home</button><button onclick="go(-90, 'p2')">Services</button><button onclick="go(-180, 'p3')">About Us</button><button onclick="go(90, 'p4')">Contact Us</button></nav></header>
-                    <div class="content"><h1>Services</h1><p>Solar hybrid mini-grids, smart metering, and EPC infrastructure.</p></div>
-                    <footer class="footer">Site created by <a href="https://jcphouston.com">Justin Case Production LLC</a> for Eos Kratos Power Ltd &copy; 2026</footer>
+                    <header class="navbar"><div class="nav-brand">Services</div><nav class="nav-links"><button onclick="go(0, 'p1')">Home</button><button onclick="go(-90, 'p2')">Services</button><button onclick="go(-180, 'p3')">About Us</button><button onclick="go(90, 'p4')">Contact Us</button></nav></header>
+                    <div class="content">
+                        <h1>Our Infrastructure</h1>
+                        <p>We provide solar hybrid mini-grids, smart metering, and EPC engineering services[cite: 374, 376].</p>
+                    </div>
+                    <footer class="footer">Site created by <a href="https://jcphouston.com">Justin Case Production LLC</a></footer>
                 </div>
             </div>
 
             <div class="face f3" id="p3">
                 <div class="scroll-container">
-                    <header class="navbar"><div class="nav-brand">Eos Kratos Power</div><nav class="nav-links"><button onclick="go(0, 'p1')">Home</button><button onclick="go(-90, 'p2')">Services</button><button onclick="go(-180, 'p3')">About Us</button><button onclick="go(90, 'p4')">Contact Us</button></nav></header>
+                    <header class="navbar"><div class="nav-brand">About Us</div><nav class="nav-links"><button onclick="go(0, 'p1')">Home</button><button onclick="go(-90, 'p2')">Services</button><button onclick="go(-180, 'p3')">About Us</button><button onclick="go(90, 'p4')">Contact Us</button></nav></header>
                     <div class="content">
                         <h1>Corporate Intelligence</h1>
                         <div class="profile-card">
+                            <h3>Chekube Imuentinyan Azu - Chairman</h3>
+                            <p>Primary capital allocator providing strategic international financial architecture[cite: 361].</p>
+                        </div>
+                        <div class="profile-card">
                             <h3>Joan Voni Saman - Local Director</h3>
-                            <p>With a B.Sc. and Diploma in Psychology from the University of Jos, Joan brings exceptional expertise in community stakeholder negotiation and operational assessment. Her background as a Research Assistant with the Population Council and Society for Family Health, combined with her experience in monitoring and evaluation at Faith Alive Foundation, enables her to lead Tripartite Agreements and community liaison operations with high precision and adaptability.</p>
+                            <p>Ms. Saman holds a B.Sc. in Psychology from the University of Jos and brings extensive experience in community negotiation, monitoring, and evaluation from roles at the Population Council and Faith Alive Foundation[cite: 462, 484, 474]. She oversees all regulatory filings, tripartite agreements, and local operational management[cite: 365].</p>
                         </div>
                     </div>
-                    <footer class="footer">Site created by <a href="https://jcphouston.com">Justin Case Production LLC</a> for Eos Kratos Power Ltd &copy; 2026</footer>
+                    <footer class="footer">Site created by <a href="https://jcphouston.com">Justin Case Production LLC</a></footer>
                 </div>
             </div>
 
             <div class="face f4" id="p4">
                 <div class="scroll-container">
-                    <header class="navbar"><div class="nav-brand">Eos Kratos Power</div><nav class="nav-links"><button onclick="go(0, 'p1')">Home</button><button onclick="go(-90, 'p2')">Services</button><button onclick="go(-180, 'p3')">About Us</button><button onclick="go(90, 'p4')">Contact Us</button></nav></header>
+                    <header class="navbar"><div class="nav-brand">Contact</div><nav class="nav-links"><button onclick="go(0, 'p1')">Home</button><button onclick="go(-90, 'p2')">Services</button><button onclick="go(-180, 'p3')">About Us</button><button onclick="go(90, 'p4')">Contact Us</button></nav></header>
                     <div class="content">
-                        <h1>Connect With Us</h1>
+                        <h1>Contact Us</h1>
                         <form id="form" class="contact-form">
                             <input type="text" placeholder="Name" required>
                             <input type="email" placeholder="Email" required>
@@ -100,13 +100,13 @@
                             <button type="submit">Submit Inquiry</button>
                         </form>
                         <div class="hq-card">
-                            <h3>Headquarters</h3>
+                            <h3>Headquarters & Contact</h3>
                             <p>Idu Karmo, Abuja, Nigeria | Houston, TX, USA</p>
-                            <p>+234 806 535 2573 | +234 806 304 1417</p>
-                            <p>info@eoskratospowerltd.com | eoskratospowerltd@gmail.com</p>
+                            <p>Phone: +234 806 535 2573 | +234 806 304 1417</p>
+                            <p>Email: info@eoskratospowerltd.com | eoskratospowerltd@gmail.com</p>
                         </div>
                     </div>
-                    <footer class="footer">Site created by <a href="https://jcphouston.com">Justin Case Production LLC</a> for Eos Kratos Power Ltd &copy; 2026</footer>
+                    <footer class="footer">Site created by <a href="https://jcphouston.com">Justin Case Production LLC</a></footer>
                 </div>
             </div>
         </div>
@@ -123,11 +123,11 @@
         document.getElementById('form').onsubmit = (e) => {
             e.preventDefault();
             document.body.classList.add('shaking');
-            document.getElementById('plane').classList.add('flying');
-            setTimeout(() => {
-                document.body.classList.remove('shaking');
-                window.location.href = "mailto:info@eoskratospowerltd.com,eoskratospowerltd@gmail.com?subject=New Inquiry";
-            }, 2000);
+            alert("Message Sent!");
+            setTimeout(() => { 
+                document.body.classList.remove('shaking'); 
+                window.location.href = "mailto:info@eoskratospowerltd.com,eoskratospowerltd@gmail.com";
+            }, 1000);
         };
     </script>
 </body>
